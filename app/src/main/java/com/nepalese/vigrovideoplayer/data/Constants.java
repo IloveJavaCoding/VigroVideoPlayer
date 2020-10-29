@@ -5,4 +5,6 @@ package com.nepalese.vigrovideoplayer.data;
  * @usage
  */
 public class Constants {
+    //action
+    public static final String ACTION_START_HOME = "com.nepalese.vigrovideoplayer.start_home";
 }

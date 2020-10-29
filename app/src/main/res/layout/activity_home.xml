@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.ui.HomeActivity">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/navigation"/>
+
+    <LinearLayout
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_10"
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_local"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:text="本地视频"
+                android:textSize="@dimen/text_size_20"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_text"
+                android:background="@drawable/selector_check_bg" />
+
+            <RadioButton
+                android:id="@+id/radio_online"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="在线视频"
+                android:textSize="@dimen/text_size_20"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_text"
+                android:background="@drawable/selector_check_bg"/>
+
+            <RadioButton
+                android:id="@+id/radio_setting"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:text="系统设置"
+                android:textSize="@dimen/text_size_20"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_text"
+                android:background="@drawable/selector_check_bg"/>
+        </RadioGroup>
+    </LinearLayout>
+</RelativeLayout>
