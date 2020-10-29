@@ -30,4 +30,13 @@
     <dimen name="text_size_25">25sp</dimen>
     <dimen name="text_size_35">35sp</dimen>
     <dimen name="text_size_55">55sp</dimen>
+
+    <!--icon,image-->
+    <dimen name="icon_24">24dp</dimen>
+    <dimen name="icon_32">32dp</dimen>
+
+    <dimen name="img_100">100dp</dimen>
+    <dimen name="img_120">120dp</dimen>
+    <dimen name="img_200">200dp</dimen>
+    <dimen name="img_240">240dp</dimen>
 </resources>

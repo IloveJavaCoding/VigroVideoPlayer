@@ -1,4 +1,4 @@
-package com.nepalese.vigrovideoplayer.presentation.component;
+package com.nepalese.vigrovideoplayer.presentation.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -86,7 +86,7 @@ public class ListView_FileSelector_Adapter extends BaseAdapter implements Compou
                 case "mp3":
                 case "wav":
                 case "mp4":
-                    holder.imageView.setImageBitmap(MediaUtil.parseAlbum(context, data.get(position), R.drawable.icon_file));
+                    holder.imageView.setImageBitmap(MediaUtil.parseAlbum(context, data.get(position), R.drawable.icon_media));
                     break;
                 case "jpg":
                 case "png":

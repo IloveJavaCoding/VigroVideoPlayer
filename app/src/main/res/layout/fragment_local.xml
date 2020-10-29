@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="本地视频"
+            android:textColor="@color/colorTY"
+            android:textSize="@dimen/text_size_25"/>
+
+        <ImageButton
+            android:id="@+id/ibList"
+            android:layout_width="@dimen/icon_32"
+            android:layout_height="@dimen/icon_32"
+            android:src="@drawable/icon_list"
+            android:background="@color/colorTransparent"/>
+    </LinearLayout>
+
+    <view
+        android:layout_below="@id/title"
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorGery"
+        android:layout_margin="@dimen/margin_3"/>
+
+    <GridView
+        android:layout_below="@id/view"
+        android:id="@+id/gridViewLocal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"/>
+
+    <TextView
+        android:layout_centerInParent="true"
+        android:id="@+id/tvNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无文件！"
+        android:textSize="@dimen/text_size_25"
+        android:textColor="@color/colorRed"
+        android:visibility="invisible"/>
+</RelativeLayout>
