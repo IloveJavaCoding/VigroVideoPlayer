@@ -6,21 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tvCountDown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3秒"
-        android:layout_margin="@dimen/margin_10"
-        android:paddingLeft="@dimen/padding_10"
-        android:paddingRight="@dimen/padding_10"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/shape_grey_bg"/>
-
     <ImageView
         android:id="@+id/imgCover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
         android:scaleType="centerInside"/>
+
+    <TextView
+        android:id="@+id/tvCountDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3秒"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/margin_10"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/shape_grey_bg"/>
 </RelativeLayout>

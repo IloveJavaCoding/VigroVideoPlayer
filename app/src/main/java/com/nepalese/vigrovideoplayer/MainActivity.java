@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.nepalese.vigrovideoplayer.presentation.ui.HomeActivity;
 import com.nepalese.vigrovideoplayer.presentation.service.NetworkService;
+import com.nepalese.virgosdk.Helper.GlideImageHelper;
 import com.nepalese.virgosdk.Util.SystemUtil;
 import com.nepalese.virgosdk.VirgoView.VirgoImageView;
 
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         tvCountDown = findViewById(R.id.tvCountDown);
         imgCover = findViewById(R.id.imgCover);
-        VirgoImageView.GlideHelper.displayImg(IMG_URL, imgCover);
+        new GlideImageHelper(1).displayImage(context,IMG_URL, imgCover);
 
         //开启后台服务 进入主界面
         startService(NetworkService.getIntent(context, null, null));
@@ -65,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 super.run();
                 while (times>0){
-                    tvCountDown.setText(times+ "秒");
+                    Message message = Message.obtain();
+                    message.what = 0;
+                    message.arg1 = times;
+                    handler.sendMessage(message);
+
                     times--;
                     try {
                         Thread.sleep(1000);
@@ -86,6 +92,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private Handler handler = new Handler(Looper.myLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    tvCountDown.setText(msg.arg1+ "秒");
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

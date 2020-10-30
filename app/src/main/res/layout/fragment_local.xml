@@ -27,13 +27,13 @@
             android:background="@color/colorTransparent"/>
     </LinearLayout>
 
-    <view
-        android:layout_below="@id/title"
+    <View
         android:id="@+id/view"
+        android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/colorGery"
-        android:layout_margin="@dimen/margin_3"/>
+        android:layout_margin="@dimen/margin_3"
+        android:background="@color/colorGery"/>
 
     <GridView
         android:layout_below="@id/view"

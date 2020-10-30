@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -39,12 +40,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void init() {
         radioGroup = findViewById(R.id.radioGroup);
-        fragmentLocal = new FragmentLocal();
-        fragmentOnline = new FragmentOnline();
-        fragmentSetting = new FragmentSetting();
     }
 
     private void setData() {
+
     }
 
     private void setListener() {
@@ -55,18 +54,24 @@ public class HomeActivity extends AppCompatActivity {
                 hideAllFragment(transaction);
                 switch (i){
                     case R.id.radio_local:
+                        Log.i(TAG, "onCheckedChanged: local");
                         showLocalFragment();
                         break;
                     case R.id.radio_online:
+                        Log.i(TAG, "onCheckedChanged: online");
                         showOnlineFragment();
                         break;
                     case R.id.radio_setting:
+                        Log.i(TAG, "onCheckedChanged: setting");
                         showSettingFragment();
                         break;
                 }
                 transaction.commit();
             }
         });
+
+        //默认选择
+        radioGroup.check(R.id.radio_online);
     }
 
     private void hideAllFragment(FragmentTransaction transaction) {
