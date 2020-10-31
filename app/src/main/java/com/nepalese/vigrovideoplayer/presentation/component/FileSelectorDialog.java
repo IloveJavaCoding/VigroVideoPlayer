@@ -31,18 +31,20 @@ import java.util.List;
  * @author nepalese on 2020/10/30 15:20
  * @usage
  */
+
+//todo 解决ListView 选中后滚动在显示位置混乱
 public class FileSelectorDialog extends Dialog implements ListView_FileSelector_Adapter.FileInterListener {
     private static final String TAG = "FileSelectorDialog";
 
-    private static final int FLAG_DIR = 0;
-    private static final int FLAG_FILE = 1;
+    public static final int FLAG_DIR = 0;
+    public static final int FLAG_FILE = 1;
 
     //仅显示某种特定文件
-    private static final String TYPE_ALL = "all";
-    private static final String TYPE_IMAGE = "image";
-    private static final String TYPE_TEXT = "txt";
-    private static final String TYPE_VIDEO = "video";
-    private static final String TYPE_AUDIO = "audio";
+    public static final String TYPE_ALL = "all";
+    public static final String TYPE_IMAGE = "image";
+    public static final String TYPE_TEXT = "txt";
+    public static final String TYPE_VIDEO = "video";
+    public static final String TYPE_AUDIO = "audio";
 
     public static final String[] IMAGE_EXTENSION = {"jpg", "jpeg", "png", "svg", "bmp", "tiff"};
     public static final String[] AUDIO_EXTENSION = {"mp3", "wav", "wma", "aac", "flac"};
@@ -52,6 +54,7 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
     private static final String DEFAULT_ROOT_PATH = "/storage/emulated/0";//默认初始位置
 
     private Context context;
+    private SelectFileCallback callback;
 
     private TextView tvCurPath, tvConfirm, tvResult;
     private LinearLayout layoutRoot, layoutLast;
@@ -133,21 +136,21 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         listView.setAdapter(adapter);
     }
 
+    //进入新的路径或返回上一层
     private void resetData(String path){
+        //若为空文件夹，则不进入
+        File file = new File(path);
+        if(file.listFiles()==null || file.listFiles().length==0){
+            SystemUtil.showToast(context, "空文件夹！");
+            return;
+        }
         curPath = path;
         tvCurPath.setText(curPath);
         files.clear();
-        index.clear();
-//        File[] fs = new File(curPath).listFiles();
-//        Arrays.sort(fs, new Comparator<File>() {
-//            @Override
-//            public int compare(File o1, File o2) {
-//                return o1.getName().compareTo(o2.getName());
-//            }
-//        });
+        index.clear();//重置选中
 
+        //note: 若直接使用 files = getFiles(curPath);listView 将无变化
         List<File> temp = getFiles(curPath);
-
         for(File f : temp){
             files.add(f);
         }
@@ -163,7 +166,14 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         }else if(flag==FLAG_FILE){//显示所有文件夹及选择的类型的文件
             switch (fileType){
                 case TYPE_ALL:
-                    return Arrays.asList(new File(path).listFiles());
+                    File[] fs = new File(path).listFiles();
+                    Arrays.sort(fs, new Comparator<File>() {
+                        @Override
+                        public int compare(File o1, File o2) {
+                            return o1.getName().compareTo(o2.getName());
+                        }
+                    });
+                    return Arrays.asList(fs);
                 case TYPE_AUDIO:
                     return getCertainFile(path, AUDIO_EXTENSION);
                 case TYPE_IMAGE:
@@ -180,6 +190,15 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
     private List<File> getCertainFile(String path, String[] extension){
         List<File> list = new ArrayList<>();
         File[] files = new File(path).listFiles();;
+
+        //排序
+        Arrays.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
         List extList = Arrays.asList(extension);
         for (File file:files){
             if (file.isDirectory()){
@@ -231,6 +250,10 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         this.fileType = fileType;
     }
 
+    public void setCallback(SelectFileCallback callback) {
+        this.callback = callback;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
@@ -240,13 +263,13 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         return super.onKeyDown(keyCode, event);
     }
 
+    //添加或移除选择对象
     @Override
     public void itemClick(View v, boolean isChecked) {
         Integer position = (Integer) v.getTag();
         switch (v.getId()){
             case R.id.cbChoose:
                 if(isChecked){
-//                    SystemUtil.showToast(context, "choose " + (position+1));
                     index.add(position);
                 }else{
                     index.remove(position);
@@ -262,8 +285,10 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
                 Log.d("click", String.valueOf(position+1));
                 //judge file/dir
                 if(files.get(position).isFile()){
-                    //
+                    //do nothing
+                    //可增加本地打开查看
                 }else{
+                    //点击，进入文件夹
                     resetData(files.get(position).getPath());
                 }
             }
@@ -272,47 +297,40 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(index.size()<1) {
+                    //未选择, 退出
+                    dismiss();
+                    return;
+                }
+
+                List<File> result = new ArrayList<>();
                 switch (flag){
                     case FLAG_DIR://return dirs
-                        List<String> temp = new ArrayList<>();
-                        if(index.size()>0){
-                            for(int i=0; i<index.size(); i++){
-                                if(files.get(index.get(i)).isDirectory()){
-                                    temp.add(files.get(index.get(i)).getPath());
-                                }
+                        for(int i=0; i<index.size(); i++){
+                            //双重保险
+                            if(files.get(index.get(i)).isDirectory()){
+                                result.add(files.get(index.get(i)));
                             }
-                        }else{
-                            //
                         }
                         break;
                     case FLAG_FILE://return files
-                        List<String> temp2 = new ArrayList<>();
-                        if(index.size()>0){
-                            for(int i=0; i<index.size(); i++){
-                                if(files.get(index.get(i)).isFile()){
-                                    temp2.add(files.get(index.get(i)).getPath());
-                                }
+                        for(int i=0; i<index.size(); i++){
+                            if(files.get(index.get(i)).isFile()){
+                                result.add(files.get(index.get(i)));
                             }
-                        }else{
-                            //
                         }
                         break;
                 }
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        dismiss();
-                    }
-                }.start();
+                //通过回调函数返回结果
+                if(callback!=null){
+                    callback.onResult(result);
+                }
+                //退出
+                dismiss();
             }
         });
 
+        //返回上一级
         layoutLast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,6 +345,7 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
             }
         });
 
+        //返回根目录
         layoutRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -343,6 +362,6 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
 
     //自定义回调接口：
     public interface SelectFileCallback{
-        void selectResult(List<File> list);
+        void onResult(List<File> list);
     }
 }

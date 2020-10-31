@@ -24,7 +24,7 @@
             android:layout_width="@dimen/icon_32"
             android:layout_height="@dimen/icon_32"
             android:src="@drawable/icon_list"
-            android:background="@color/colorTransparent"/>
+            android:background="@color/colorTransparent" />
     </LinearLayout>
 
     <View

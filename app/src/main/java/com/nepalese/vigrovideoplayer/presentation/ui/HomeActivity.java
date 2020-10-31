@@ -5,15 +5,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.nepalese.vigrovideoplayer.R;
-import com.nepalese.vigrovideoplayer.presentation.component.FileSelectorView;
-import com.nepalese.vigrovideoplayer.presentation.component.FloatView;
 import com.nepalese.vigrovideoplayer.presentation.ui.fragment.FragmentLocal;
 import com.nepalese.vigrovideoplayer.presentation.ui.fragment.FragmentOnline;
 import com.nepalese.vigrovideoplayer.presentation.ui.fragment.FragmentSetting;

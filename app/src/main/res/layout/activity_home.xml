@@ -33,7 +33,6 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:button="@null"
-                android:checked="true"
                 android:text="本地视频"
                 android:textSize="@dimen/text_size_20"
                 android:textAlignment="center"
