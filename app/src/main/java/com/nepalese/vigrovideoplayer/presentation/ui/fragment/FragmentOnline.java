@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.nepalese.vigrovideoplayer.R;
-import com.nepalese.vigrovideoplayer.presentation.component.FileSelectorDialog;
+import com.nepalese.vigrovideoplayer.presentation.component.VirgoFileSelectorDialog;
 
 import java.io.File;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
  * @author nepalese on 2020/10/29 12:01
  * @usage
  */
-public class FragmentOnline extends Fragment implements FileSelectorDialog.SelectFileCallback {
+public class FragmentOnline extends Fragment implements VirgoFileSelectorDialog.SelectFileCallback {
     private static final String TAG = "FragmentOnline";
 
     private View rootView;
@@ -31,7 +31,7 @@ public class FragmentOnline extends Fragment implements FileSelectorDialog.Selec
 
     private Button button;
     private TextView textView;
-    private FileSelectorDialog dialog;
+    private VirgoFileSelectorDialog dialog;
 
     @Nullable
     @Override
@@ -49,12 +49,12 @@ public class FragmentOnline extends Fragment implements FileSelectorDialog.Selec
     private void init() {
         button = rootView.findViewById(R.id.button);
         textView = rootView.findViewById(R.id.textView);
-        dialog = new FileSelectorDialog(context);
+        dialog = new VirgoFileSelectorDialog(context);
     }
 
     private void setData() {
-        dialog.setFlag(FileSelectorDialog.FLAG_DIR);//设置要选择的是文件还是文件夹
-        dialog.setFileType(FileSelectorDialog.TYPE_ALL);//选择dir后，无效
+        dialog.setFlag(VirgoFileSelectorDialog.FLAG_DIR);//设置要选择的是文件还是文件夹
+        dialog.setFileType(VirgoFileSelectorDialog.TYPE_ALL);//选择dir后，无效
 //        dialog.setRootPath("/storage/emulated/0");//设置根目录，若无效调用默认值
         dialog.setCallback(this);//设置回调，必选，若要返回值
     }

@@ -29,13 +29,13 @@ import java.util.List;
 
 /**
  * @author nepalese on 2020/10/30 15:20
- * @usage
+ * @usage 弹框式文件选择器，可筛选文件类型或仅文件夹，返回选中的文件或文件夹
+ *
  */
-
-//todo 解决ListView 选中后滚动在显示位置混乱
-public class FileSelectorDialog extends Dialog implements ListView_FileSelector_Adapter.FileInterListener {
+public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSelector_Adapter.FileInterListener {
     private static final String TAG = "FileSelectorDialog";
 
+    //选择文件或文件夹
     public static final int FLAG_DIR = 0;
     public static final int FLAG_FILE = 1;
 
@@ -46,17 +46,18 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_AUDIO = "audio";
 
+    //选择特定文件类型后将显示的文件拓展名
     public static final String[] IMAGE_EXTENSION = {"jpg", "jpeg", "png", "svg", "bmp", "tiff"};
     public static final String[] AUDIO_EXTENSION = {"mp3", "wav", "wma", "aac", "flac"};
     public static final String[] VIDEO_EXTENSION = {"mp4", "flv", "avi", "wmv", "mpeg", "mov", "rm", "swf"};
-    public static final String[] TEXT_EXTENSION = {"txt"};
+    public static final String[] TEXT_EXTENSION = {"txt", "java", "html", "xml", "php"};
 
     private static final String DEFAULT_ROOT_PATH = "/storage/emulated/0";//默认初始位置
 
     private Context context;
     private SelectFileCallback callback;
 
-    private TextView tvCurPath, tvConfirm, tvResult;
+    private TextView tvCurPath, tvConfirm;
     private LinearLayout layoutRoot, layoutLast;
     private ListView listView;
     private ListView_FileSelector_Adapter adapter;
@@ -65,16 +66,17 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
     private List<File> files;//返回值
     private List<Integer> index;//选中文件、夹索引
 
+    //默认设置
     private int flag = FLAG_FILE;//默认选择文件
     private String rootPath = DEFAULT_ROOT_PATH;
     private String fileType = TYPE_ALL;
 
-    public FileSelectorDialog(@NonNull Context context) {
-        //自定义弹框样式，可使用默认值：0
+    public VirgoFileSelectorDialog(@NonNull Context context) {
+        //默认自定义弹框样式，使用下面的构造函数可另设样式
         this(context, R.style.File_Dialog);
     }
 
-    public FileSelectorDialog(@NonNull Context context, int themeResId) {
+    public VirgoFileSelectorDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
         setCancelable(false);
         init(context);
@@ -88,7 +90,6 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
 
         tvCurPath = view.findViewById(R.id.tvCurPath);
         tvConfirm = view.findViewById(R.id.tvConfirmChoose);
-        tvResult = view.findViewById(R.id.tvResult);
 
         layoutRoot = view.findViewById(R.id.layoutToRoot);
         layoutLast = view.findViewById(R.id.layoutToLast);
@@ -122,21 +123,24 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
 
 //        lp.width = 300; // 宽度
         lp.height = 500; // 高度
-        lp.alpha = 0.7f; // 透明度
+        lp.alpha = 0.8f; // 透明度
 
         dialogWindow.setAttributes(lp);
     }
 
+    //==============================================================================================
+    //初始化数据
     private void setData() {
         curPath = rootPath;
         tvCurPath.setText(curPath);
         files  = new ArrayList(getFiles(curPath));
 
         adapter = new ListView_FileSelector_Adapter(context, files, this);//指向的是最开始的list
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setAdapter(adapter);
     }
 
-    //进入新的路径或返回上一层
+    //进入新的路径或返回上一层，刷新数据
     private void resetData(String path){
         //若为空文件夹，则不进入
         File file = new File(path);
@@ -159,7 +163,6 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
 
     //根据条件筛选显示文件
     private List<File> getFiles(String path){
-        //todo 增加排序功能
         if(flag==FLAG_DIR){
             FileFilter filter = File::isDirectory;
             return Arrays.asList(new File(path).listFiles(filter));
@@ -222,6 +225,13 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         return "";
     }
 
+    //清空数据
+    private void release() {
+        files.clear();
+        index.clear();
+        adapter = null;
+    }
+
     //===============================================外部调用api=====================================
     @Override
     public void show() {
@@ -232,6 +242,7 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
     @Override
     public void dismiss() {
         super.dismiss();
+        release();
     }
 
     //设置根目录
@@ -242,10 +253,12 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
         }
     }
 
+    //设置选择文件或文件夹
     public void setFlag(int flag) {
         this.flag = flag;
     }
 
+    //设置要筛选文件类型
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
@@ -271,8 +284,10 @@ public class FileSelectorDialog extends Dialog implements ListView_FileSelector_
             case R.id.cbChoose:
                 if(isChecked){
                     index.add(position);
+                    Log.i(TAG, "add: " + position);
                 }else{
                     index.remove(position);
+                    Log.i(TAG, "remove: " + position);
                 }
                 break;
         }

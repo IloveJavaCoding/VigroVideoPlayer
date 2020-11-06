@@ -12,22 +12,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nepalese.vigrovideoplayer.R;
+import com.nepalese.vigrovideoplayer.presentation.bean.CheckBean;
 import com.nepalese.virgosdk.Util.MediaUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListView_FileSelector_Adapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
+public class ListView_FileSelector_Adapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private List<File> data;
-    private FileInterListener interListener;
+    private List<CheckBean> beans = new ArrayList<>();//记录checkbox的选中情况
+    private FileInterListener interListener;//供外部引用接口
 
     public ListView_FileSelector_Adapter(Context context, List<File> data, FileInterListener interListener){
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.interListener = interListener;
+        for (int i = 0; i < data.size(); i++) {
+            CheckBean bean = new CheckBean(i, false);
+            beans.add(bean);
+        }
     }
     @Override
     public int getCount() {
@@ -44,11 +51,6 @@ public class ListView_FileSelector_Adapter extends BaseAdapter implements Compou
         return 0;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        interListener.itemClick(buttonView, isChecked);
-    }
-
     static class ViewHolder {
         public LinearLayout layout;
         public TextView tvData;
@@ -57,7 +59,7 @@ public class ListView_FileSelector_Adapter extends BaseAdapter implements Compou
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
@@ -99,7 +101,25 @@ public class ListView_FileSelector_Adapter extends BaseAdapter implements Compou
         }
 
         //make component be able click from outside
-        holder.checkBox.setOnCheckedChangeListener(this);
+        //防止CheckBox因滚动ListView时混乱
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beans.get(position).setChecked(!beans.get(position).isChecked());
+                interListener.itemClick(view, beans.get(position).isChecked());
+                holder.checkBox.setChecked(beans.get(position).isChecked());
+            }
+        });
+
+//        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                beans.get(position).setChecked(b);
+//                interListener.itemClick(compoundButton, b);
+//            }
+//        });
+
+        holder.checkBox.setChecked(beans.get(position).isChecked());
         holder.checkBox.setTag(position);
         return convertView;
     }
