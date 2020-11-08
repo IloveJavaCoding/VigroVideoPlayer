@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         tvCountDown = findViewById(R.id.tvCountDown);
         imgCover = findViewById(R.id.imgCover);
+        imgCover.setScaleType(ImageView.ScaleType.FIT_XY);
         new GlideImageHelper(1).displayImage(context,IMG_URL, imgCover);
 
         //开启后台服务 进入主界面

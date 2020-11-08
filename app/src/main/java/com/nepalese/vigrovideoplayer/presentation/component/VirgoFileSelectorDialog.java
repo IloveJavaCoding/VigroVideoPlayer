@@ -70,6 +70,7 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
     private int flag = FLAG_FILE;//默认选择文件
     private String rootPath = DEFAULT_ROOT_PATH;
     private String fileType = TYPE_ALL;
+    private int dialogHeight = 500;//默认弹框高度
 
     public VirgoFileSelectorDialog(@NonNull Context context) {
         //默认自定义弹框样式，使用下面的构造函数可另设样式
@@ -99,7 +100,19 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
 
         setContentView(view);
         setListener();
-        setLayout();
+    }
+
+    //==============================================================================================
+    //初始化数据
+    private void setData() {
+        setLayout();//设置弹框布局
+        curPath = rootPath;
+        tvCurPath.setText(curPath);
+        files  = new ArrayList(getFiles(curPath));
+
+        adapter = new ListView_FileSelector_Adapter(context, files, this);//指向的是最开始的list
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setAdapter(adapter);
     }
 
     private void setLayout() {
@@ -122,22 +135,11 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
          */
 
 //        lp.width = 300; // 宽度
-        lp.height = 500; // 高度
-        lp.alpha = 0.8f; // 透明度
+        lp.height = dialogHeight; // 高度
+        lp.alpha = 0.85f; // 透明度
 
+        Log.i(TAG, "setLayout: height= " + lp.height);
         dialogWindow.setAttributes(lp);
-    }
-
-    //==============================================================================================
-    //初始化数据
-    private void setData() {
-        curPath = rootPath;
-        tvCurPath.setText(curPath);
-        files  = new ArrayList(getFiles(curPath));
-
-        adapter = new ListView_FileSelector_Adapter(context, files, this);//指向的是最开始的list
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setAdapter(adapter);
     }
 
     //进入新的路径或返回上一层，刷新数据
@@ -265,6 +267,10 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
 
     public void setCallback(SelectFileCallback callback) {
         this.callback = callback;
+    }
+
+    public void setDialogHeight(int dialogHeight) {
+        this.dialogHeight = dialogHeight;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
