@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,12 +19,13 @@ import com.nepalese.vigrovideoplayer.R;
 import com.nepalese.vigrovideoplayer.presentation.adapter.ListView_FileSelector_Adapter;
 import com.nepalese.virgosdk.Util.SystemUtil;
 
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nepalese on 2020/10/30 15:20
@@ -102,19 +102,6 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
         setListener();
     }
 
-    //==============================================================================================
-    //初始化数据
-    private void setData() {
-        setLayout();//设置弹框布局
-        curPath = rootPath;
-        tvCurPath.setText(curPath);
-        files  = new ArrayList(getFiles(curPath));
-
-        adapter = new ListView_FileSelector_Adapter(context, files, this);//指向的是最开始的list
-//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setAdapter(adapter);
-    }
-
     private void setLayout() {
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -136,10 +123,22 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
 
 //        lp.width = 300; // 宽度
         lp.height = dialogHeight; // 高度
-        lp.alpha = 0.85f; // 透明度
+        lp.alpha = 0.8f; // 透明度
 
-        Log.i(TAG, "setLayout: height= " + lp.height);
         dialogWindow.setAttributes(lp);
+    }
+
+    //==============================================================================================
+    //初始化数据
+    private void setData() {
+        setLayout();//设置弹框布局
+        curPath = rootPath;
+        tvCurPath.setText(curPath);
+        files  = new ArrayList(getFiles(curPath));
+
+        adapter = new ListView_FileSelector_Adapter(context, files, this);//指向的是最开始的list
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setAdapter(adapter);
     }
 
     //进入新的路径或返回上一层，刷新数据
@@ -157,27 +156,21 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
 
         //note: 若直接使用 files = getFiles(curPath);listView 将无变化
         List<File> temp = getFiles(curPath);
-        for(File f : temp){
-            files.add(f);
-        }
+        files.addAll(temp);
         adapter.notifyDataSetChanged();
     }
 
     //根据条件筛选显示文件
     private List<File> getFiles(String path){
         if(flag==FLAG_DIR){
-            FileFilter filter = File::isDirectory;
-            return Arrays.asList(new File(path).listFiles(filter));
+            FileFilter filter = File::isDirectory;//File::isDirectory
+            return Arrays.asList(Objects.requireNonNull(new File(path).listFiles(filter)));
         }else if(flag==FLAG_FILE){//显示所有文件夹及选择的类型的文件
             switch (fileType){
                 case TYPE_ALL:
                     File[] fs = new File(path).listFiles();
-                    Arrays.sort(fs, new Comparator<File>() {
-                        @Override
-                        public int compare(File o1, File o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
+                    assert fs != null;
+                    Arrays.sort(fs, (o1, o2) -> o1.getName().compareTo(o2.getName()));
                     return Arrays.asList(fs);
                 case TYPE_AUDIO:
                     return getCertainFile(path, AUDIO_EXTENSION);
@@ -197,12 +190,7 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
         File[] files = new File(path).listFiles();;
 
         //排序
-        Arrays.sort(files, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        Arrays.sort(files, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
         List extList = Arrays.asList(extension);
         for (File file:files){
@@ -286,97 +274,83 @@ public class VirgoFileSelectorDialog extends Dialog implements ListView_FileSele
     @Override
     public void itemClick(View v, boolean isChecked) {
         Integer position = (Integer) v.getTag();
-        switch (v.getId()){
-            case R.id.cbChoose:
-                if(isChecked){
-                    index.add(position);
-                    Log.i(TAG, "add: " + position);
-                }else{
-                    index.remove(position);
-                    Log.i(TAG, "remove: " + position);
-                }
-                break;
+        if (v.getId() == R.id.cbChoose) {
+            if (isChecked) {
+                index.add(position);
+                Log.i(TAG, "add: " + position);
+            } else {
+                index.remove(position);
+                Log.i(TAG, "remove: " + position);
+            }
         }
     }
 
     private void setListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("click", String.valueOf(position+1));
-                //judge file/dir
-                if(files.get(position).isFile()){
-                    //do nothing
-                    //可增加本地打开查看
-                }else{
-                    //点击，进入文件夹
-                    resetData(files.get(position).getPath());
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Log.d("click", String.valueOf(position+1));
+            //judge file/dir
+            if(files.get(position).isFile()){
+                //do nothing
+                //可增加本地打开查看
+            }else{
+                //点击，进入文件夹
+                resetData(files.get(position).getPath());
             }
         });
 
-        tvConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(index.size()<1) {
-                    //未选择, 退出
-                    dismiss();
-                    return;
-                }
-
-                List<File> result = new ArrayList<>();
-                switch (flag){
-                    case FLAG_DIR://return dirs
-                        for(int i=0; i<index.size(); i++){
-                            //双重保险
-                            if(files.get(index.get(i)).isDirectory()){
-                                result.add(files.get(index.get(i)));
-                            }
-                        }
-                        break;
-                    case FLAG_FILE://return files
-                        for(int i=0; i<index.size(); i++){
-                            if(files.get(index.get(i)).isFile()){
-                                result.add(files.get(index.get(i)));
-                            }
-                        }
-                        break;
-                }
-                //通过回调函数返回结果
-                if(callback!=null){
-                    callback.onResult(result);
-                }
-                //退出
+        tvConfirm.setOnClickListener(v -> {
+            if(index.size()<1) {
+                //未选择, 退出
                 dismiss();
+                return;
             }
+
+            List<File> result = new ArrayList<>();
+            switch (flag){
+                case FLAG_DIR://return dirs
+                    for(int i=0; i<index.size(); i++){
+                        //双重保险
+                        if(files.get(index.get(i)).isDirectory()){
+                            result.add(files.get(index.get(i)));
+                        }
+                    }
+                    break;
+                case FLAG_FILE://return files
+                    for(int i=0; i<index.size(); i++){
+                        if(files.get(index.get(i)).isFile()){
+                            result.add(files.get(index.get(i)));
+                        }
+                    }
+                    break;
+            }
+            //通过回调函数返回结果
+            if(callback!=null){
+                callback.onResult(result);
+            }
+            //退出
+            dismiss();
         });
 
         //返回上一级
-        layoutLast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //judge curPath is root or not
-                if (curPath.equals(rootPath)) {
-                    //do nothing
-                    SystemUtil.showToast(context, "已是根目录");
-                }else{
-                    //back to last layer
-                    resetData(curPath.substring(0, curPath.lastIndexOf("/")));
-                }
+        layoutLast.setOnClickListener(v -> {
+            //judge curPath is root or not
+            if (curPath.equals(rootPath)) {
+                //do nothing
+                SystemUtil.showToast(context, "已是根目录");
+            }else{
+                //back to last layer
+                resetData(curPath.substring(0, curPath.lastIndexOf("/")));
             }
         });
 
         //返回根目录
-        layoutRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(curPath.equals(rootPath)){
-                    //do nothing
-                    SystemUtil.showToast(context, "已是根目录");
-                }else{
-                    //back to root
-                    resetData(rootPath);
-                }
+        layoutRoot.setOnClickListener(v -> {
+            if(curPath.equals(rootPath)){
+                //do nothing
+                SystemUtil.showToast(context, "已是根目录");
+            }else{
+                //back to root
+                resetData(rootPath);
             }
         });
     }

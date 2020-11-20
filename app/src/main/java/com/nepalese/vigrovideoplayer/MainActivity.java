@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.bumptech.glide.Glide;
+import com.nepalese.vigrovideoplayer.data.Constants;
 import com.nepalese.vigrovideoplayer.presentation.ui.HomeActivity;
 import com.nepalese.vigrovideoplayer.presentation.service.NetworkService;
 import com.nepalese.virgosdk.Helper.GlideImageHelper;
@@ -23,7 +28,7 @@ import com.nepalese.virgosdk.VirgoView.VirgoImageView;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
-    private final int time = 3;
+    private int time = 3;
     private TextView tvCountDown;
     private ImageView imgCover;
 
@@ -40,12 +45,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setLayout();
         if(!SystemUtil.checkPermission(this, NEEDED_PERMISSIONS)){
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
             return;
         }
         init();
+    }
+
+    private void setLayout() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        }
     }
 
     private void init() {
@@ -54,45 +71,33 @@ public class MainActivity extends AppCompatActivity {
         tvCountDown = findViewById(R.id.tvCountDown);
         imgCover = findViewById(R.id.imgCover);
         imgCover.setScaleType(ImageView.ScaleType.FIT_XY);
-        new GlideImageHelper(GlideImageHelper.TYPE_URL).displayImage(context,IMG_URL, imgCover);
+        Glide.with(context).load(IMG_URL).into(imgCover);
 
         //开启后台服务 进入主界面
-        startService(NetworkService.getIntent(context, null, null));
+        startService(NetworkService.getIntent(context, Constants.ACTION_START_HOME, null));
         countDown();
     }
 
-    private void countDown(){
-        new Thread(){
-            int times = time;
-            @Override
-            public void run() {
-                super.run();
-                while (times>0){
-                    Message message = Message.obtain();
-                    message.what = 0;
-                    message.arg1 = times;
-                    handler.sendMessage(message);
+    private void countDown() {
+        handler.post(runnable);
+    }
 
-                    times--;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                startHome();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if(time>0){
+                Message message = Message.obtain();
+                message.what = 0;
+                message.arg1 = time;
+                handler.sendMessage(message);
+
+                time--;
+                handler.postDelayed(runnable, 1000);
+            }else{
+                finish();
             }
-        }.start();
-    }
-
-    private void startHome() {
-//        new Handler(Looper.myLooper()).postDelayed(() -> {
-//
-//        },time*1000);
-        Intent intent = new Intent(context, HomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
+        }
+    };
 
     private Handler handler = new Handler(Looper.myLooper()){
         @Override

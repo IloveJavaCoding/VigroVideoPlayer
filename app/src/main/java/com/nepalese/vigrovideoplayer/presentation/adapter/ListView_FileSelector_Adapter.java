@@ -1,27 +1,18 @@
 package com.nepalese.vigrovideoplayer.presentation.adapter;
 
 import android.content.Context;
-import android.media.ThumbnailUtils;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
-
 import com.bumptech.glide.Glide;
 import com.nepalese.vigrovideoplayer.R;
-import com.nepalese.vigrovideoplayer.presentation.bean.CheckBean;
-import com.nepalese.virgosdk.Helper.GlideImageHelper;
-import com.nepalese.virgosdk.Util.BitmapUtil;
-import com.nepalese.virgosdk.Util.MediaUtil;
+import com.nepalese.virgosdk.Beans.CheckBean;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,10 +57,9 @@ public class ListView_FileSelector_Adapter extends BaseAdapter {
         public CheckBox checkBox;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.layout_file_selector_list, null);
@@ -111,22 +101,11 @@ public class ListView_FileSelector_Adapter extends BaseAdapter {
 
         //make component be able click from outside
         //防止CheckBox因滚动ListView时混乱
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                beans.get(position).setChecked(!beans.get(position).isChecked());
-                interListener.itemClick(view, beans.get(position).isChecked());
-                holder.checkBox.setChecked(beans.get(position).isChecked());
-            }
+        holder.checkBox.setOnClickListener(view -> {
+            beans.get(position).setChecked(!beans.get(position).isChecked());
+            interListener.itemClick(view, beans.get(position).isChecked());
+            holder.checkBox.setChecked(beans.get(position).isChecked());
         });
-
-//        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                beans.get(position).setChecked(b);
-//                interListener.itemClick(compoundButton, b);
-//            }
-//        });
 
         holder.checkBox.setChecked(beans.get(position).isChecked());
         holder.checkBox.setTag(position);

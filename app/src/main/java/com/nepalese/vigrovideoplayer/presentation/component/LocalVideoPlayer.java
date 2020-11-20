@@ -8,32 +8,36 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.nepalese.vigrovideoplayer.data.bean.Video;
+import com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewSurface;
+
 import java.io.File;
 import java.util.List;
 
 /**
- * @author nepalese on 2020/9/18 11:11
+ * @author nepalese on 2020/11/20 11:11
  * @usage
  */
-public class VirgoVideoViewSurfaceChild extends VirgoVideoViewSurface {
-    private static final String TAG = "VirgoVideoSurfaceChild";
+public class LocalVideoPlayer extends VirgoVideoViewSurface {
+    private static final String TAG = "VideoPlayer";
 
     private Context context;
 
-    private List<String> url = null;
+    private List<Video> url = null;
     private int currentIndex = 0;
     private boolean hasSetUrl = false;
     private boolean hasPause = false;
+    private boolean isLoop = true; //列表内循环；
 
-    public VirgoVideoViewSurfaceChild(Context context) {
+    public LocalVideoPlayer(Context context) {
         this(context, null);
     }
 
-    public VirgoVideoViewSurfaceChild(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+    public LocalVideoPlayer(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public VirgoVideoViewSurfaceChild(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LocalVideoPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         init();
@@ -41,34 +45,33 @@ public class VirgoVideoViewSurfaceChild extends VirgoVideoViewSurface {
 
     private void init(){
         setLooping(false);
-        setCompletionListener(mp ->{
-                Log.d(TAG, "onCompletion: complete");
+
+        setCompletionListener(mediaPlayer -> {
+            Log.d(TAG, "onCompletion: complete");
+            if(isLoop){
                 load();
+            }
         });
 
-        setErrorListener((mp, what, extra) -> {
+        setErrorListener((mediaPlayer, i, i1) -> {
+            if(isLoop){
                 load();
-                return true;
+            }
+            return true;
         });
-
-        //获取视频分辨率
-//        setSizeChangedListener((mp, w, h) ->{
-//            if(w>1920 || h>1080){
-//                Log.e(TAG, "big resolution!");
-////                load();
-//            }
-//        });
-        //设置系统默认的视频控制器（时间条，播放、暂停，前进、后退）
-//        setMediaController(new MediaController(context));
     }
 
-    public VirgoVideoViewSurfaceChild setUrl(List<String> urls) {
+    public LocalVideoPlayer setUrl(List<Video> urls, int currentIndex) {
         if (urls != null && !urls.isEmpty()) {
-            url = urls;
-            hasSetUrl = true;
-            currentIndex = 0;
+            this.url = urls;
+            this.hasSetUrl = true;
+            this.currentIndex = currentIndex;
         }
         return this;
+    }
+
+    public void setLoop(boolean loop) {
+        isLoop = loop;
     }
 
     public void play() {
@@ -84,17 +87,34 @@ public class VirgoVideoViewSurfaceChild extends VirgoVideoViewSurface {
         setMute(on);
     }
 
+    public void pause(){
+        stopPlay();
+    }
+
+    public void continuePlayer(){
+        continuePlay();
+    }
+
+    public void nextOne(){
+        load();
+    }
+
+    public void lastOne(){
+        currentIndex-=2;
+        load();
+    }
+
     private void load() {
         if (url == null || url.isEmpty()) return;
-        if (currentIndex >= url.size()) {
+        if (currentIndex >= url.size() || currentIndex<0) {
             currentIndex = 0;
         }
 
-        String path = url.get(currentIndex);
+        String path = url.get(currentIndex).getPath();
         File file = new File(path);
 
         if (file.exists()) {
-            Log.i(TAG, "播放本地视频");
+            Log.i(TAG, "播放本地视频: " + path);
             setVideoUri(Uri.fromFile(file));
         } else {
             Log.i(TAG, "播放在线视频");

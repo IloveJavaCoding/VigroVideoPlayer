@@ -13,12 +13,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.util.LogTime;
 import com.nepalese.vigrovideoplayer.data.Constants;
 import com.nepalese.vigrovideoplayer.data.DBHelper;
 import com.nepalese.vigrovideoplayer.data.bean.Video;
 import com.nepalese.vigrovideoplayer.presentation.component.FloatView;
 import com.nepalese.vigrovideoplayer.presentation.event.FinishScanEvent;
 import com.nepalese.vigrovideoplayer.presentation.event.StartScanVideoEvent;
+import com.nepalese.vigrovideoplayer.presentation.ui.HomeActivity;
 import com.nepalese.virgosdk.Util.BitmapUtil;
 import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgosdk.Util.MediaUtil;
@@ -36,8 +38,9 @@ import java.lang.ref.WeakReference;
 public class NetworkService extends Service {
     private static final String TAG = "NetworkService";
 
+    private static final int MSG_START_HOME = 0;
+
     private Context context;
-//    private FloatView floatView;//自定义提示框
     private VirgoHandler handler;
     private DBHelper dbHelper;
 
@@ -88,13 +91,15 @@ public class NetworkService extends Service {
         if (TextUtils.isEmpty(action)) return;
         switch (action){
             case Constants.ACTION_START_HOME:
-                startHome();
+                handler.sendEmptyMessageDelayed(MSG_START_HOME, 3000);
                 break;
         }
     }
 
     private void startHome() {
-
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     //file is directory
@@ -110,10 +115,7 @@ public class NetworkService extends Service {
                         if(f2.getPath().endsWith(post)){
                             Log.i(TAG, "scanVideoFile: " + f2.getAbsolutePath());
                             Video video = getVideoFileInfo(context, f2.getAbsolutePath());
-                            //1. 获取缩略图
-                            //2. 进行压缩
-                            //3. 保存到本地
-                            BitmapUtil.saveBitmap2File(BitmapUtil.compressBitmap(MediaUtil.getVideoThumb(context, f2.getAbsolutePath(), 1),100), thumbPath, video.getName() + ".jpg");
+                            BitmapUtil.saveBitmap2File(MediaUtil.getVideoThumb(context, f2.getAbsolutePath(), 1), thumbPath, video.getName() + ".jpg");
                             dbHelper.saveVideo(video);
                         }
                     }
@@ -163,6 +165,8 @@ public class NetworkService extends Service {
 
     @Subscribe
     public void onMainThread(StartScanVideoEvent event){
+        Log.i(TAG, "onMainThread: StartScanVideoEvent");
+        dbHelper.clearVideo();
         for(File file: event.getList()) {
             scanVideoFile(file);
         }
@@ -183,6 +187,9 @@ public class NetworkService extends Service {
             NetworkService networkService = reference.get();
             if(networkService!=null){
                 switch (msg.what){
+                    case MSG_START_HOME:
+                        networkService.startHome();
+                        break;
                 }
             }
         }

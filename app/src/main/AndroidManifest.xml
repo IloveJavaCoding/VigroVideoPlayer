@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VigroVideoPlayer"
         android:usesCleartextTraffic="true">
-        <activity android:name=".presentation.ui.HomeActivity"/>
+        <activity android:name=".presentation.ui.VideoPlayerActivity"/>
+        <activity android:name=".presentation.ui.HomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +31,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

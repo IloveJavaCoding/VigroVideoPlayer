@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="@dimen/margin_3"
-        android:background="@color/colorGery"/>
+        android:background="@color/colorGray"/>
 
     <GridView
         android:layout_below="@id/view"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:dividerHeight="@dimen/margin_15"
-        android:divider="@color/colorGery"
+        android:divider="@color/colorGray"
         android:numColumns="2"/>
 
     <TextView

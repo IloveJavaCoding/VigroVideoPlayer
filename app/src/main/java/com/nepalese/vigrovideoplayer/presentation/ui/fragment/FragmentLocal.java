@@ -1,7 +1,7 @@
 package com.nepalese.vigrovideoplayer.presentation.ui.fragment;
 
 import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,12 +14,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.nepalese.vigrovideoplayer.R;
@@ -30,19 +28,14 @@ import com.nepalese.vigrovideoplayer.presentation.adapter.GridView_Local_Adapter
 import com.nepalese.vigrovideoplayer.presentation.component.VirgoFileSelectorDialog;
 import com.nepalese.vigrovideoplayer.presentation.event.FinishScanEvent;
 import com.nepalese.vigrovideoplayer.presentation.event.StartScanVideoEvent;
-import com.nepalese.vigrovideoplayer.presentation.service.NetworkService;
-import com.nepalese.virgosdk.Beans.VideoFile;
-import com.nepalese.virgosdk.Util.BitmapUtil;
+import com.nepalese.vigrovideoplayer.presentation.ui.VideoPlayerActivity;
 import com.nepalese.virgosdk.Util.FileUtil;
-import com.nepalese.virgosdk.Util.MediaUtil;
 import com.nepalese.virgosdk.Util.ScreenUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.List;
 
 /**
@@ -92,7 +85,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
 
     private void init() {
         dbHelper = DBHelper.getInstance(context);
-        dialog = new VirgoFileSelectorDialog(context);
+        dialog = new VirgoFileSelectorDialog(context, R.style.File_Dialog);
 
         ibList = rootView.findViewById(R.id.ibList);
         tvNote = rootView.findViewById(R.id.tvNote);
@@ -123,12 +116,11 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "onItemClick: " + videoList.get(position).getName());
+                Intent intent = new Intent(context.getApplicationContext(), VideoPlayerActivity.class);
+                intent.putExtra("index", position);
+                startActivity(intent);
             }
         });
-    }
-
-    private void hideNote(){
-        tvNote.setVisibility(View.INVISIBLE);
     }
 
     private void flashData() {
@@ -141,16 +133,6 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onResult(List<File> list) {
-        Log.i(TAG, "onResult: ");
-        if(list!=null && list.size()>0){
-            //在后台进行加载，扫描
-            handler.sendEmptyMessage(MSG_FLASH_LIST);
-            post(new StartScanVideoEvent(list));
-        }
-    }
-
     private void clearThumb() {
         File file = new File(thumbPath);
         File[] f = file.listFiles();
@@ -161,27 +143,28 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         }
     }
 
-    private Handler handler = new Handler(Looper.myLooper()){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case MSG_FLASH_LIST:
-                    showLoadingView();
-                    clearThumb();
-                    dbHelper.clearVideo();
-                    break;
-            }
-        }
-    };
+    private void hideNote(){
+        tvNote.setVisibility(View.INVISIBLE);
+    }
 
     private void hideLoadingView() {
         layoutLoad.setVisibility(View.INVISIBLE);
     }
 
-    //得改为dialog
     private void showLoadingView() {
         layoutLoad.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onResult(List<File> list) {
+        Log.i(TAG, "onResult: ");
+        if(list!=null && list.size()>0){
+            //在后台进行加载，扫描
+            Message message = Message.obtain();
+            message.what = MSG_FLASH_LIST;
+            message.obj = list;
+            handler.sendMessage(message);
+        }
     }
 
     @Override
@@ -203,13 +186,29 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         }
     }
 
-    private void post(Object object) {
+    private void postEvent(Object object) {
         EventBus.getDefault().post(object);
     }
 
     @Subscribe
     public void onMainThread(FinishScanEvent event){
+        Log.i(TAG, "onMainThread: FinishScanEvent");
         hideLoadingView();
         flashData();
     }
+
+
+    private Handler handler = new Handler(Looper.myLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case MSG_FLASH_LIST:
+                    showLoadingView();
+                    clearThumb();
+                    postEvent(new StartScanVideoEvent((List<File>)msg.obj));
+                    break;
+            }
+        }
+    };
 }

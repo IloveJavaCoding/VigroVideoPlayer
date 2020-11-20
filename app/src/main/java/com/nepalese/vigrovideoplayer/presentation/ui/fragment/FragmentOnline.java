@@ -50,7 +50,7 @@ public class FragmentOnline extends Fragment implements VirgoFileSelectorDialog.
     private void init() {
         button = rootView.findViewById(R.id.button);
         textView = rootView.findViewById(R.id.textView);
-        dialog = new VirgoFileSelectorDialog(context);
+        dialog = new VirgoFileSelectorDialog(context, R.style.File_Dialog);
     }
 
     private void setData() {
@@ -74,7 +74,7 @@ public class FragmentOnline extends Fragment implements VirgoFileSelectorDialog.
         if(list!=null && list.size()>0){
             StringBuilder builder = new StringBuilder();
             for(File f: list){
-                builder.append(f.getAbsolutePath() + "\n");
+                builder.append(f.getAbsolutePath()).append("\n");
             }
             textView.setText(builder.toString());
         }

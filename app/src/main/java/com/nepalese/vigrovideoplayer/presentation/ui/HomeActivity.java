@@ -3,8 +3,11 @@ package com.nepalese.vigrovideoplayer.presentation.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.RadioGroup;
 
 import com.nepalese.vigrovideoplayer.R;
@@ -28,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         init();
-        setData();
+        setLayout();
         setListener();
     }
 
@@ -36,8 +39,9 @@ public class HomeActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.radioGroup);
     }
 
-    private void setData() {
-
+    private void setLayout() {
+        getWindow().setStatusBarColor(Color.BLACK);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
     }
 
     private void setListener() {
