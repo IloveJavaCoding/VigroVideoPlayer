@@ -78,6 +78,10 @@ public class DBHelper {
         videoDao.delete(item);
     }
 
+    public void clearVideo(){
+        videoDao.deleteAll();
+    }
+
     public void deleteVideoByName(String name){
         List<Video> list = getVideoByName(name);
         for(Video video: list){

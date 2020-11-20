@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.nepalese.vigrovideoplayer.R;
 import com.nepalese.vigrovideoplayer.data.bean.Video;
+import com.nepalese.virgosdk.Util.BitmapUtil;
 import com.nepalese.virgosdk.Util.MediaUtil;
 
 import java.util.List;
@@ -67,10 +69,8 @@ public class GridView_Local_Adapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        String path = data.get(i).getPath();
         viewHolder.tvName.setText(data.get(i).getName());
-        viewHolder.imgThumb.setImageBitmap(MediaUtil.getVideoThumb(context, path, 1));//file
-
+        Glide.with(context).load(data.get(i).getThumbPath()).into(viewHolder.imgThumb);
         return view;
     }
 }

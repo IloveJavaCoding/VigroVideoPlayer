@@ -17,7 +17,7 @@
         android:id="@+id/tvCountDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="3秒"
+        android:text="@string/sec_3"
         android:textColor="@color/white"
         android:layout_margin="@dimen/margin_10"
         android:paddingLeft="@dimen/padding_10"

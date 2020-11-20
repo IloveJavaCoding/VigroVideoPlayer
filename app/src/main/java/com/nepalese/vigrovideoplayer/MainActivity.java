@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         tvCountDown = findViewById(R.id.tvCountDown);
         imgCover = findViewById(R.id.imgCover);
         imgCover.setScaleType(ImageView.ScaleType.FIT_XY);
-        new GlideImageHelper(1).displayImage(context,IMG_URL, imgCover);
+        new GlideImageHelper(GlideImageHelper.TYPE_URL).displayImage(context,IMG_URL, imgCover);
 
         //开启后台服务 进入主界面
         startService(NetworkService.getIntent(context, null, null));
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == ACTION_REQUEST_PERMISSIONS) {
             if (isAllGranted) {
                 //get all requested permissions
-
+                init();
             } else {
                 SystemUtil.showToast(getApplicationContext(),"Permission denied!");
                 finish();

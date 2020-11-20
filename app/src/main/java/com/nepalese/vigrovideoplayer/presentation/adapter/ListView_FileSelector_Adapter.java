@@ -1,6 +1,9 @@
 package com.nepalese.vigrovideoplayer.presentation.adapter;
 
 import android.content.Context;
+import android.media.ThumbnailUtils;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
+import com.bumptech.glide.Glide;
 import com.nepalese.vigrovideoplayer.R;
 import com.nepalese.vigrovideoplayer.presentation.bean.CheckBean;
+import com.nepalese.virgosdk.Helper.GlideImageHelper;
+import com.nepalese.virgosdk.Util.BitmapUtil;
 import com.nepalese.virgosdk.Util.MediaUtil;
 
 import java.io.File;
@@ -58,6 +66,7 @@ public class ListView_FileSelector_Adapter extends BaseAdapter {
         public CheckBox checkBox;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -88,11 +97,11 @@ public class ListView_FileSelector_Adapter extends BaseAdapter {
                 case "mp3":
                 case "wav":
                 case "mp4":
-                    holder.imageView.setImageBitmap(MediaUtil.parseAlbum(context, data.get(position), R.drawable.icon_media));
+                    holder.imageView.setImageResource(R.drawable.icon_media);
                     break;
                 case "jpg":
                 case "png":
-                    holder.imageView.setImageBitmap(MediaUtil.getImageThumbnail(context, path));
+                    Glide.with(context).load(path).into(holder.imageView);
                     break;
                 default:
                     holder.imageView.setImageResource(R.drawable.icon_file);

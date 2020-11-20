@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nepalese.vigrovideoplayer.R;
@@ -16,12 +17,12 @@ import com.nepalese.vigrovideoplayer.R;
  * @usage
  */
 public class FloatView extends LinearLayout {
-
     private WindowManager wm;
     private WindowManager.LayoutParams wmParams;
     private Context mCtx;
     private FloatView self;
     private TextView tvContent;
+    private ProgressBar progressBar;
 
     public FloatView(Context context) {
         super(context);
@@ -58,6 +59,7 @@ public class FloatView extends LinearLayout {
         LayoutInflater mLayoutInflater = LayoutInflater.from(mCtx);
         View view = mLayoutInflater.inflate(R.layout.layout_float, null);
         tvContent = view.findViewById(R.id.tvContent);
+        progressBar = view.findViewById(R.id.pbLoad);
         self.addView(view);
     }
 
@@ -67,6 +69,17 @@ public class FloatView extends LinearLayout {
         }
         //显示内容
         tvContent.setText(cont);
+    }
+
+    public void controlProcessBar(boolean show){
+        if (self.getParent() == null) {
+            wm.addView(self, wmParams);
+        }
+        if(show){
+            progressBar.setVisibility(VISIBLE);
+        }else {
+            progressBar.setVisibility(GONE);
+        }
     }
 
     /**

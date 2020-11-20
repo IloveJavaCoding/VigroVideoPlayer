@@ -24,7 +24,8 @@
             android:layout_width="@dimen/icon_32"
             android:layout_height="@dimen/icon_32"
             android:src="@drawable/icon_list"
-            android:background="@color/colorTransparent" />
+            android:scaleType="centerInside"
+            android:background="@drawable/selector_button_transparent" />
     </LinearLayout>
 
     <View
@@ -40,15 +41,37 @@
         android:id="@+id/gridViewLocal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3"/>
+        android:dividerHeight="@dimen/margin_15"
+        android:divider="@color/colorGery"
+        android:numColumns="2"/>
 
     <TextView
         android:layout_centerInParent="true"
         android:id="@+id/tvNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂无文件！"
+        android:text="@string/list_no_file"
         android:textSize="@dimen/text_size_25"
         android:textColor="@color/colorRed"
         android:visibility="invisible"/>
+
+    <LinearLayout
+        android:id="@+id/layoutLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:layout_centerInParent="true">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5"
+            android:text="@string/loading"
+            android:textColor="@color/colorTY"/>
+    </LinearLayout>
 </RelativeLayout>

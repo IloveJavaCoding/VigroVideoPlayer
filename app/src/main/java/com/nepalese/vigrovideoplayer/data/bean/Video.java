@@ -1,5 +1,7 @@
 package com.nepalese.vigrovideoplayer.data.bean;
 
+import com.nepalese.virgosdk.Beans.BaseBean;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Unique;
@@ -10,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * @usage
  */
 @Entity
-public class Video extends BaseBean{
+public class Video extends BaseBean {
     @Id(autoincrement = true)
     private Long id;
     @Unique
