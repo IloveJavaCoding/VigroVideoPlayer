@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * @author nepalese on 2020/10/29 08:51
@@ -39,6 +40,8 @@ public class NetworkService extends Service {
     private static final String TAG = "NetworkService";
 
     private static final int MSG_START_HOME = 0;
+    private static final int MSG_START_SCAN = 1;
+    private static final int MSG_FINISH_SCAN = 2;
 
     private Context context;
     private VirgoHandler handler;
@@ -159,22 +162,21 @@ public class NetworkService extends Service {
         }
     }
 
-    private void post(Object object) {
+    private void postEvent(Object object) {
         EventBus.getDefault().post(object);
     }
 
     @Subscribe
     public void onMainThread(StartScanVideoEvent event){
         Log.i(TAG, "onMainThread: StartScanVideoEvent");
-        dbHelper.clearVideo();
-        for(File file: event.getList()) {
-            scanVideoFile(file);
-        }
-        post(new FinishScanEvent());
+        Message message = Message.obtain();
+        message.what = MSG_START_SCAN;
+        message.obj = event.getList();
+        handler.sendMessage(message);
     }
 
     //======================================================================================
-    private static class VirgoHandler extends Handler{
+    private class VirgoHandler extends Handler{
         WeakReference<NetworkService> reference;
 
         public VirgoHandler(NetworkService networkService){
@@ -190,8 +192,27 @@ public class NetworkService extends Service {
                     case MSG_START_HOME:
                         networkService.startHome();
                         break;
+                    case MSG_START_SCAN:
+                        networkService.startScan((List<File>) msg.obj);
+                        break;
+                    case MSG_FINISH_SCAN:
+                        postEvent(new FinishScanEvent());
+                        break;
                 }
             }
         }
+    }
+
+    private void startScan(List<File> list) {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                for(File file: list) {
+                    scanVideoFile(file);
+                }
+                handler.sendEmptyMessage(MSG_FINISH_SCAN);
+            }
+        }.start();
     }
 }

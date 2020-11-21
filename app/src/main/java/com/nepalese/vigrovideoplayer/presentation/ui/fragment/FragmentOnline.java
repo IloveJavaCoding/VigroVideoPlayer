@@ -1,38 +1,45 @@
 package com.nepalese.vigrovideoplayer.presentation.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.nepalese.vigrovideoplayer.R;
-import com.nepalese.vigrovideoplayer.presentation.component.VirgoFileSelectorDialog;
-import com.nepalese.virgosdk.Util.ScreenUtil;
+import com.nepalese.vigrovideoplayer.data.DBHelper;
+import com.nepalese.vigrovideoplayer.data.bean.LiveSource;
+import com.nepalese.vigrovideoplayer.presentation.adapter.ListView_Online_Adapter;
+import com.nepalese.vigrovideoplayer.presentation.ui.FullVideoPlayerActivity;
 
-import java.io.File;
 import java.util.List;
 
 /**
  * @author nepalese on 2020/10/29 12:01
  * @usage
  */
-public class FragmentOnline extends Fragment implements VirgoFileSelectorDialog.SelectFileCallback {
+public class FragmentOnline extends Fragment{
     private static final String TAG = "FragmentOnline";
 
     private View rootView;
     private Context context;
+    private DBHelper dbHelper;
 
-    private Button button;
-    private TextView textView;
-    private VirgoFileSelectorDialog dialog;
+    private ListView listView;
+    private ListView_Online_Adapter adapter;
+    private LinearLayout layoutLoad;
+
+    private List<LiveSource> liveList;
 
     @Nullable
     @Override
@@ -48,35 +55,38 @@ public class FragmentOnline extends Fragment implements VirgoFileSelectorDialog.
     }
 
     private void init() {
-        button = rootView.findViewById(R.id.button);
-        textView = rootView.findViewById(R.id.textView);
-        dialog = new VirgoFileSelectorDialog(context, R.style.File_Dialog);
+        dbHelper = DBHelper.getInstance(context);
+        listView = rootView.findViewById(R.id.listOnline);
+        layoutLoad = rootView.findViewById(R.id.layoutLoad);
     }
 
     private void setData() {
-        dialog.setDialogHeight(ScreenUtil.getScreenHeight(context)/2);//设置弹框高度（显示屏高度一半）
-        dialog.setFlag(VirgoFileSelectorDialog.FLAG_FILE);//设置要选择的是文件还是文件夹
-        dialog.setFileType(VirgoFileSelectorDialog.TYPE_IMAGE);//选择dir后，无效
-//        dialog.setRootPath("/storage/emulated/0");//设置根目录，若无效调用默认值
-        dialog.setCallback(this);//设置回调，必选，若要返回值
+        //(url=http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8) : CCTV13
+        //url=http://112.17.40.140/PLTV/88888888/224/3221226554/index.m3u8 : CCTV5
+        liveList = dbHelper.getAllLiveSource();
+        if(liveList==null || liveList.size()<1){
+            LiveSource liveSource = new LiveSource();
+            liveSource.setName("CCTV5");
+            liveSource.setUrl("http://112.17.40.140/PLTV/88888888/224/3221226554/index.m3u8");
+            liveList.add(liveSource);
+            dbHelper.saveLiveSource(liveSource);
+            LiveSource liveSource2 = new LiveSource();
+            liveSource2.setName("CCTV13");
+            liveSource2.setUrl("http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8");
+            liveList.add(liveSource);
+            dbHelper.saveLiveSource(liveSource2);
+        }
+
+        adapter = new ListView_Online_Adapter(context, liveList);
+        listView.setAdapter(adapter);
     }
 
     private void setListener() {
-        button.setOnClickListener((view)->{
-            dialog.show();
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Log.i(TAG, "onItemClick: ");
+            Intent intent = new Intent(context, FullVideoPlayerActivity.class);
+            intent.putExtra("path", liveList.get(position).getUrl());
+            startActivity(intent);
         });
-    }
-
-    //从文件选择框返回的数据
-    @Override
-    public void onResult(List<File> list) {
-        Log.i(TAG, "onResult: ");
-        if(list!=null && list.size()>0){
-            StringBuilder builder = new StringBuilder();
-            for(File f: list){
-                builder.append(f.getAbsolutePath()).append("\n");
-            }
-            textView.setText(builder.toString());
-        }
     }
 }

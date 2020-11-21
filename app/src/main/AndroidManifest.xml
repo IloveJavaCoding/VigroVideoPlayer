@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VigroVideoPlayer"
         android:usesCleartextTraffic="true">
-        <activity android:name=".presentation.ui.VideoPlayerActivity"/>
+        <activity android:name=".presentation.ui.FullVideoPlayerActivity"></activity>
+        <activity android:name=".presentation.ui.VideoPlayerActivity" />
         <activity android:name=".presentation.ui.HomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

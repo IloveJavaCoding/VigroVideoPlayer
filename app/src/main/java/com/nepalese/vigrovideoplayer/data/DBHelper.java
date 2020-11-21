@@ -3,10 +3,12 @@ package com.nepalese.vigrovideoplayer.data;
 import android.content.Context;
 
 import com.nepalese.vigrovideoplayer.data.bean.DownloadItem;
+import com.nepalese.vigrovideoplayer.data.bean.LiveSource;
 import com.nepalese.vigrovideoplayer.data.bean.Video;
 import com.nepalese.vigrovideoplayer.data.db.DaoMaster;
 import com.nepalese.vigrovideoplayer.data.db.DaoSession;
 import com.nepalese.vigrovideoplayer.data.db.DownloadItemDao;
+import com.nepalese.vigrovideoplayer.data.db.LiveSourceDao;
 import com.nepalese.vigrovideoplayer.data.db.VideoDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -29,6 +31,7 @@ public class DBHelper {
 
     private VideoDao videoDao;
     private DownloadItemDao downloadItemDao;
+    private LiveSourceDao liveSourceDao;
 
     private DBHelper(Context context) {
         if (context == null) {
@@ -39,6 +42,7 @@ public class DBHelper {
 
         videoDao = session.getVideoDao();
         downloadItemDao = session.getDownloadItemDao();
+        liveSourceDao = session.getLiveSourceDao();
     }
 
     private DaoSession getDaoSession(Context context) {
@@ -121,5 +125,26 @@ public class DBHelper {
 
     public List<DownloadItem> getAllDownloadItem(){
         return downloadItemDao.loadAll();
+    }
+
+    //LiveSourceDao
+    public void saveLiveSource(LiveSource item){
+        liveSourceDao.insert(item);
+    }
+
+    public void deleteLiveSource(LiveSource item){
+        liveSourceDao.delete(item);
+    }
+
+    public void deleteAllLiveSource(){
+        liveSourceDao.deleteAll();
+    }
+
+    public void updateLiveSource(LiveSource item){
+        liveSourceDao.update(item);
+    }
+
+    public List<LiveSource> getAllLiveSource(){
+        return liveSourceDao.loadAll();
     }
 }

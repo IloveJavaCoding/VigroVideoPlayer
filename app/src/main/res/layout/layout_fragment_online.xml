@@ -4,17 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Button" />
-
-    <TextView
-        android:id="@+id/textView"
+    <ListView
+        android:id="@+id/listOnline"
+        android:padding="@dimen/padding_10"
+        android:dividerHeight="10dp"
+        android:divider="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="TextView" />
+        android:layout_height="match_parent" />
+
+    <include
+        layout="@layout/layout_loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

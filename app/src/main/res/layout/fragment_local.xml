@@ -15,14 +15,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="本地视频"
+            android:text="@string/video_local"
             android:textColor="@color/colorTY"
             android:textSize="@dimen/text_size_25"/>
 
         <ImageButton
             android:id="@+id/ibList"
-            android:layout_width="@dimen/icon_32"
-            android:layout_height="@dimen/icon_32"
+            android:layout_margin="@dimen/margin_5"
+            android:layout_width="@dimen/icon_24"
+            android:layout_height="@dimen/icon_24"
             android:src="@drawable/icon_list"
             android:scaleType="centerInside"
             android:background="@drawable/selector_button_transparent" />
@@ -55,23 +56,10 @@
         android:textColor="@color/colorRed"
         android:visibility="invisible"/>
 
-    <LinearLayout
-        android:id="@+id/layoutLoad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <include
+        layout="@layout/layout_loading"
         android:visibility="invisible"
-        android:layout_centerInParent="true">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_5"
-            android:text="@string/loading"
-            android:textColor="@color/colorTY"/>
-    </LinearLayout>
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

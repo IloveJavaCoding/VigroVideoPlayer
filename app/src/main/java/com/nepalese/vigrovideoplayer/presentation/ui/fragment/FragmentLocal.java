@@ -96,7 +96,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
     private void setData() {
         videoList = dbHelper.getAllVideo();
         if(videoList==null || videoList.size()==0){
-            tvNote.setVisibility(View.VISIBLE);
+           showNote();
         }
 
         adapter = new GridView_Local_Adapter(context, videoList);
@@ -124,10 +124,13 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
     }
 
     private void flashData() {
+        videoList.clear();
         List<Video> temp = dbHelper.getAllVideo();
         if(temp!=null && temp.size()>0){
             hideNote();
             videoList.addAll(temp);
+        }else{
+            showNote();
         }
 
         adapter.notifyDataSetChanged();
@@ -147,11 +150,17 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         tvNote.setVisibility(View.INVISIBLE);
     }
 
+    private void showNote(){
+        tvNote.setVisibility(View.VISIBLE);
+    }
+
     private void hideLoadingView() {
+        Log.i(TAG, "hideLoadingView: ");
         layoutLoad.setVisibility(View.INVISIBLE);
     }
 
     private void showLoadingView() {
+        Log.i(TAG, "showLoadingView: ");
         layoutLoad.setVisibility(View.VISIBLE);
     }
 
@@ -164,6 +173,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
             message.what = MSG_FLASH_LIST;
             message.obj = list;
             handler.sendMessage(message);
+            postEvent(new StartScanVideoEvent(list));
         }
     }
 
@@ -197,7 +207,6 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         flashData();
     }
 
-
     private Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -206,7 +215,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
                 case MSG_FLASH_LIST:
                     showLoadingView();
                     clearThumb();
-                    postEvent(new StartScanVideoEvent((List<File>)msg.obj));
+                    dbHelper.clearVideo();
                     break;
             }
         }
