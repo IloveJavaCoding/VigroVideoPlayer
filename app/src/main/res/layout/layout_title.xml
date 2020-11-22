@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding_5"
+    android:padding="@dimen/padding_3"
     android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/ibBack"
-        android:layout_width="50dp"
+        android:layout_width="35dp"
         android:layout_height="match_parent"
         android:background="@drawable/selector_img_button"
-        android:src="@drawable/img_back"
-        android:scaleType="centerInside"/>
+        android:src="@mipmap/icon_back_wthie"
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/tvTitle"
@@ -22,6 +22,5 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_25"
         android:textAlignment="center"/>
-
 
 </RelativeLayout>

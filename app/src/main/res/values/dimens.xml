@@ -7,6 +7,8 @@
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_15">15dp</dimen>
     <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
+    <dimen name="padding_50">50dp</dimen>
 
     <dimen name="margin_3">3dp</dimen>
     <dimen name="margin_5">5dp</dimen>
@@ -27,16 +29,17 @@
     <dimen name="text_size_17">17sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_25">25sp</dimen>
     <dimen name="text_size_35">35sp</dimen>
     <dimen name="text_size_55">55sp</dimen>
 
     <!--icon,image-->
-    <dimen name="icon_24">24dp</dimen>
-    <dimen name="icon_32">32dp</dimen>
+    <dimen name="icon_24">20dp</dimen>
+    <dimen name="icon_32">28dp</dimen>
 
-    <dimen name="img_100">100dp</dimen>
-    <dimen name="img_120">120dp</dimen>
-    <dimen name="img_200">200dp</dimen>
-    <dimen name="img_240">240dp</dimen>
+    <dimen name="img_100">80dp</dimen>
+    <dimen name="img_120">96dp</dimen>
+    <dimen name="img_200">160dp</dimen>
+    <dimen name="img_240">192dp</dimen>
 </resources>

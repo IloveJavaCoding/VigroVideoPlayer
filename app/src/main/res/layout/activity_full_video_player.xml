@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBlack"
+    android:id="@+id/fullVideoLayout"
     tools:context=".presentation.ui.FullVideoPlayerActivity">
 
     <com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewSurface
@@ -13,4 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <ImageButton
+        android:id="@+id/ibVideoControl"
+        android:layout_centerInParent="true"
+        android:layout_width="@dimen/img_120"
+        android:layout_height="@dimen/img_120"
+        android:src="@mipmap/icon_play_200"
+        android:scaleType="fitCenter"
+        android:background="@drawable/selector_button_transparent"/>
 </RelativeLayout>

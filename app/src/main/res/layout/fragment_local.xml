@@ -24,7 +24,7 @@
             android:layout_margin="@dimen/margin_5"
             android:layout_width="@dimen/icon_24"
             android:layout_height="@dimen/icon_24"
-            android:src="@drawable/icon_list"
+            android:src="@mipmap/icon_list"
             android:scaleType="centerInside"
             android:background="@drawable/selector_button_transparent" />
     </LinearLayout>
@@ -34,7 +34,8 @@
         android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_margin="@dimen/margin_3"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
         android:background="@color/colorGray"/>
 
     <GridView

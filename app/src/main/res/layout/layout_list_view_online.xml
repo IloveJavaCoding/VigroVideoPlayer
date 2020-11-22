@@ -11,7 +11,7 @@
         android:id="@+id/imgLogo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/icon_tv"/>
+        android:src="@mipmap/icon_live_logo"/>
 
     <TextView
         android:id="@+id/tvLiveName"
@@ -24,5 +24,5 @@
         android:layout_marginStart="@dimen/margin_10"
         android:textSize="@dimen/text_size_18"
         android:textColor="@color/colorGreen"
-        app:drawableEndCompat="@drawable/img_arrow" />
+        app:drawableEndCompat="@mipmap/icon_arrow_left" />
 </LinearLayout>

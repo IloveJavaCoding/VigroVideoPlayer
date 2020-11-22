@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/online_live"
+        android:textColor="@color/colorTY"
+        android:textSize="@dimen/text_size_22"
+        android:layout_margin="@dimen/margin_10" />
+
+    <ImageButton
+        android:id="@+id/ibOnlineAdd"
+        android:layout_width="@dimen/icon_32"
+        android:layout_height="@dimen/icon_32"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/margin_10"
+        android:src="@mipmap/icon_add_black"
+        android:scaleType="fitCenter"
+        android:background="@drawable/selector_button_transparent"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_below="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:background="@color/colorGray"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_below="@+id/ibOnlineAdd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listOnline"
+            android:padding="@dimen/padding_10"
+            android:dividerHeight="10dp"
+            android:divider="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include
+        layout="@layout/layout_loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
