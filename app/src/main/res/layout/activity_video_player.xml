@@ -8,27 +8,40 @@
 
     <RelativeLayout
         android:id="@+id/layoutAll"
+        android:background="@color/colorBlack"
         android:layout_width="match_parent"
-        android:layout_height="240dp">
+        android:layout_height="@dimen/video_height">
 
         <com.nepalese.virgovideoplayer.presentation.component.LocalVideoPlayer
             android:id="@+id/videoPlayer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
 
         <include
-            android:id="@+id/video_title"
             layout="@layout/layout_title"
             android:layout_width="match_parent"
             android:layout_height="35dp"/>
 
-        <RelativeLayout
-            android:id="@+id/layoutController"
+        <include
+            layout="@layout/layout_controller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-        </RelativeLayout>
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/layoutGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutAll">
+
+        <GridView
+            android:id="@+id/gridViewVideoList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="@dimen/margin_15"
+            android:divider="@color/colorGray"
+            android:numColumns="2"/>
+    </RelativeLayout>
 </RelativeLayout>

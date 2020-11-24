@@ -38,14 +38,14 @@
         android:layout_marginRight="@dimen/margin_5"
         android:background="@color/colorGray"/>
 
-    <GridView
+    <ListView
         android:layout_below="@id/view"
-        android:id="@+id/gridViewLocal"
+        android:padding="@dimen/padding_3"
+        android:id="@+id/listViewVideoLocal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="@dimen/margin_15"
-        android:divider="@color/colorGray"
-        android:numColumns="2"/>
+        android:dividerHeight="@dimen/margin_3"
+        android:divider="@color/colorTY_Little" />
 
     <TextView
         android:layout_centerInParent="true"

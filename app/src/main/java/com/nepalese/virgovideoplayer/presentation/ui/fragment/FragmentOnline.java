@@ -39,8 +39,8 @@ import java.util.List;
 public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VirgoFileSelectorDialog.SelectFileCallback {
     private static final String TAG = "FragmentOnline";
 
-    private static final int MSG_UPDATE_LIST = 0;
-    private static final int MSG_ADD_LIST = 1;
+    private static final int MSG_UPDATE_LIST = 1;
+    private static final int MSG_ADD_LIST = 2;
 
     private View rootView;
     private Context context;

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,8 @@ import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.data.DBHelper;
 import com.nepalese.virgovideoplayer.data.bean.Video;
-import com.nepalese.virgovideoplayer.presentation.adapter.GridView_Local_Adapter;
+import com.nepalese.virgovideoplayer.presentation.adapter.GridView_VideoList_Adapter;
+import com.nepalese.virgovideoplayer.presentation.adapter.ListView_VideoList_Adapter;
 import com.nepalese.virgovideoplayer.presentation.component.VirgoFileSelectorDialog;
 import com.nepalese.virgovideoplayer.presentation.event.FinishScanEvent;
 import com.nepalese.virgovideoplayer.presentation.event.StartScanVideoEvent;
@@ -52,8 +54,8 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
     private View rootView;
     private ImageButton ibList;
     private TextView tvNote;
-    private GridView gridView;
-    private GridView_Local_Adapter adapter;
+    private ListView listView;
+    private ListView_VideoList_Adapter adapter;
     private VirgoFileSelectorDialog dialog;
     private LinearLayout layoutLoad;
 
@@ -89,7 +91,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
 
         ibList = rootView.findViewById(R.id.ibList);
         tvNote = rootView.findViewById(R.id.tvNote);
-        gridView = rootView.findViewById(R.id.gridViewLocal);
+        listView = rootView.findViewById(R.id.listViewVideoLocal);
         layoutLoad = rootView.findViewById(R.id.layoutLoad);
     }
 
@@ -99,8 +101,8 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
            showNote();
         }
 
-        adapter = new GridView_Local_Adapter(context, videoList);
-        gridView.setAdapter(adapter);
+        adapter = new ListView_VideoList_Adapter(context, videoList);
+        listView.setAdapter(adapter);
 
         dialog.setDialogHeight(ScreenUtil.getScreenHeight(context)/2);//设置弹框高度（显示屏高度一半）
         dialog.setFlag(VirgoFileSelectorDialog.FLAG_DIR);//设置要选择的是文件还是文件夹
@@ -112,7 +114,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
             dialog.show();
         });
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "onItemClick: " + videoList.get(position).getName());

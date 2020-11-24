@@ -36,8 +36,8 @@ import java.net.URL;
 public class FragmentSetting extends Fragment implements View.OnClickListener {
     private static final String TAG = "FragmentSetting";
     
-    private static final int MSG_DOWNLOAD_FILE_OK = 0;
-    private static final int MSG_DOWNLOAD_TS_OK = 1;
+    private static final int MSG_DOWNLOAD_FILE_OK = 1;
+    private static final int MSG_DOWNLOAD_TS_OK = 2;
 
     private View rootView;
     private Context context;

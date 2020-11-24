@@ -40,6 +40,11 @@
 
     <dimen name="img_100">80dp</dimen>
     <dimen name="img_120">96dp</dimen>
+    <dimen name="img_140">112dp</dimen>
+    <dimen name="img_160">128dp</dimen>
     <dimen name="img_200">160dp</dimen>
     <dimen name="img_240">192dp</dimen>
+
+    <dimen name="text_time_width">65dp</dimen>
+    <dimen name="video_height">220dp</dimen>
 </resources>

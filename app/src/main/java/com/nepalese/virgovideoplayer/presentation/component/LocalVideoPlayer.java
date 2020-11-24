@@ -8,8 +8,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewTexture;
 import com.nepalese.virgovideoplayer.data.bean.Video;
 import com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewSurface;
+import com.nepalese.virgovideoplayer.presentation.event.LocalVideoPlayEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -44,7 +48,7 @@ public class LocalVideoPlayer extends VirgoVideoViewSurface {
     }
 
     private void init(){
-        setLooping(false);
+        setLooping(false);//单循环
 
         setCompletionListener(mediaPlayer -> {
             Log.d(TAG, "onCompletion: complete");
@@ -87,14 +91,6 @@ public class LocalVideoPlayer extends VirgoVideoViewSurface {
         setMute(on);
     }
 
-    public void pause(){
-        stopPlay();
-    }
-
-    public void continuePlayer(){
-        continuePlay();
-    }
-
     public void nextOne(){
         load();
     }
@@ -104,12 +100,17 @@ public class LocalVideoPlayer extends VirgoVideoViewSurface {
         load();
     }
 
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
     private void load() {
         if (url == null || url.isEmpty()) return;
         if (currentIndex >= url.size() || currentIndex<0) {
             currentIndex = 0;
         }
 
+        EventBus.getDefault().post(new LocalVideoPlayEvent(currentIndex));
         String path = url.get(currentIndex).getPath();
         File file = new File(path);
 
@@ -121,7 +122,7 @@ public class LocalVideoPlayer extends VirgoVideoViewSurface {
             setVideoPath(path);
         }
         start();
-        currentIndex++;
+        ++currentIndex;
     }
 
     //==============================================================================================

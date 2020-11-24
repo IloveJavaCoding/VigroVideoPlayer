@@ -14,7 +14,9 @@
         tools:targetApi="m">
         <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.FullVideoPlayerActivity"
             android:screenOrientation="landscape" />
-        <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.VideoPlayerActivity" />
+        <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.VideoPlayerActivity"
+            android:screenOrientation="sensor"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"/>
         <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.HomeActivity" />
         <activity android:name="com.nepalese.virgovideoplayer.MainActivity">
             <intent-filter>
