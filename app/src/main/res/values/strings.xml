@@ -8,4 +8,6 @@
     <string name="sec_3">3秒</string>
     <string name="setting_clear_cache">清空缓存</string>
     <string name="online_live">电视直播</string>
+    <string name="download_title">文件下载</string>
+    <string name="video_download">文件下载</string>
 </resources>

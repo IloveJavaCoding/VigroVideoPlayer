@@ -33,7 +33,7 @@
         android:maxHeight="2dp"
         android:progress="30"
         android:layout_gravity="center_vertical"
-        android:thumb="@drawable/ic_seekbar_bick"
+        android:thumb="@drawable/ic_seekbar_bike"
         android:progressDrawable="@drawable/seekbar_style" />
 
     <TextView

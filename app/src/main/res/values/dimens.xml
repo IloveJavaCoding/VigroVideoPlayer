@@ -38,6 +38,8 @@
     <dimen name="icon_24">20dp</dimen>
     <dimen name="icon_32">28dp</dimen>
 
+    <dimen name="img_50">40dp</dimen>
+    <dimen name="img_80">64dp</dimen>
     <dimen name="img_100">80dp</dimen>
     <dimen name="img_120">96dp</dimen>
     <dimen name="img_140">112dp</dimen>

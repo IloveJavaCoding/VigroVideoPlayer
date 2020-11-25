@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/padding_3"
     android:id="@+id/layoutTitle"
+    android:background="@color/colorBlack_30"
     android:orientation="horizontal">
 
     <ImageButton
@@ -19,6 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:maxWidth="200dp"
+        android:ellipsize="middle"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_18"
         android:textAlignment="center"/>

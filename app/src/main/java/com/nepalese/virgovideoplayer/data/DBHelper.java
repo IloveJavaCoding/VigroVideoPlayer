@@ -119,6 +119,10 @@ public class DBHelper {
         downloadItemDao.delete(item);
     }
 
+    public void deleteAllDownloadItem(){
+        downloadItemDao.deleteAll();
+    }
+
     public void updateDownloadItem(DownloadItem item){
         downloadItemDao.update(item);
     }

@@ -127,7 +127,8 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
     }
 
     private void clearAllTable() {
-        dbHelper.clearLiveSource();
+//        dbHelper.clearLiveSource();
+        dbHelper.deleteAllDownloadItem();
     }
     
     private Handler handler = new Handler(Looper.myLooper()){
