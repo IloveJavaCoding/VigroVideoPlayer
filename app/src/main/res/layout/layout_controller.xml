@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layoutController"
+    android:background="@color/colorBlack_30"
+    android:padding="@dimen/padding_5"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/ctrlIbPlay"
+        android:layout_width="@dimen/icon_32"
+        android:layout_height="@dimen/icon_32"
+        android:src="@mipmap/icon_play_32"
+        android:scaleType="centerInside"
+        android:background="@drawable/selector_button_transparent"/>
+
+    <TextView
+        android:id="@+id/ctrlCurTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_16"/>
+
+    <SeekBar
+        android:id="@+id/ctrlSeekBar"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="2dp"
+        android:layout_gravity="center_vertical"
+        android:thumb="@drawable/ic_seekbar_bike"
+        android:progressDrawable="@drawable/seekbar_style" />
+
+    <TextView
+        android:id="@+id/ctrlTotalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_16"/>
+
+    <ImageButton
+        android:id="@+id/ctrlIbFull"
+        android:layout_width="@dimen/icon_32"
+        android:layout_height="@dimen/icon_32"
+        android:src="@mipmap/icon_full_screen"
+        android:scaleType="centerInside"
+        android:background="@drawable/selector_button_transparent"/>
+</LinearLayout>

@@ -5,6 +5,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -12,11 +13,16 @@
         android:theme="@style/Theme.VigroVideoPlayer"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.FullVideoPlayerActivity"
+        <activity android:name=".presentation.ui.DownloadDetailActivity"></activity>
+        <activity
+            android:name=".presentation.ui.FullVideoPlayerActivity"
             android:screenOrientation="landscape" />
-        <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.VideoPlayerActivity" />
-        <activity android:name="com.nepalese.virgovideoplayer.presentation.ui.HomeActivity" />
-        <activity android:name="com.nepalese.virgovideoplayer.MainActivity">
+        <activity
+            android:name=".presentation.ui.VideoPlayerActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="sensor" />
+        <activity android:name=".presentation.ui.HomeActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.nepalese.virgovideoplayer.presentation.service.NetworkService" />
+        <service android:name=".presentation.service.NetworkService" />
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -35,7 +41,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
 </manifest>

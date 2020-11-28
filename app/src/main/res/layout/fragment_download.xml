@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/video_download"
+            android:textColor="@color/colorTY"
+            android:textSize="@dimen/text_size_22"
+            android:layout_margin="@dimen/margin_10" />
+
+        <ImageButton
+            android:id="@+id/ibDownloadDetail"
+            android:layout_width="@dimen/icon_32"
+            android:layout_height="@dimen/icon_32"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/margin_10"
+            android:src="@mipmap/icon_download"
+            android:scaleType="fitCenter"
+            android:background="@drawable/selector_button_transparent"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_below="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_5"
+            android:background="@color/colorGray"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_5"
+        android:orientation="horizontal">
+
+        <com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText
+            android:id="@+id/delInputM3u8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:hint="url"
+            android:paddingStart="@dimen/padding_10"
+            android:paddingBottom="@dimen/padding_5"
+            android:paddingTop="@dimen/padding_5"
+            android:paddingEnd="@dimen/padding_5"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:background="@drawable/frame_edit_text"/>
+
+        <Button
+            android:id="@+id/bM3u8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M3U8"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="@dimen/padding_5"
+            android:layout_marginRight="@dimen/padding_5"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_5"
+        android:orientation="horizontal">
+
+        <com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText
+            android:id="@+id/delInputFile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:hint="url"
+            android:paddingStart="@dimen/padding_10"
+            android:paddingBottom="@dimen/padding_5"
+            android:paddingTop="@dimen/padding_5"
+            android:paddingEnd="@dimen/padding_5"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:background="@drawable/frame_edit_text"/>
+
+        <Button
+            android:id="@+id/bFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="File"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="@dimen/padding_5"
+            android:layout_marginRight="@dimen/padding_5"/>
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayoutDownload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listDownloadItem"
+            android:padding="@dimen/padding_10"
+            android:dividerHeight="10dp"
+            android:divider="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

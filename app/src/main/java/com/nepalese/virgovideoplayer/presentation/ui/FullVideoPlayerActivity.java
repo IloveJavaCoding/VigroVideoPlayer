@@ -23,8 +23,8 @@ import androidx.annotation.NonNull;
 public class FullVideoPlayerActivity extends BaseActivity {
     private static final String TAG = "FullVideoPlayerActivity";
 
-    private static final int MSG_HIDE_CONTROLLER = 0;
-    private static final int MSG_SHOW_CONTROLLER = 1;
+    private static final int MSG_HIDE_CONTROLLER = 1;
+    private static final int MSG_SHOW_CONTROLLER = 2;
     private static final int HIDE_AFTER = 2345;
 
     private Context context;

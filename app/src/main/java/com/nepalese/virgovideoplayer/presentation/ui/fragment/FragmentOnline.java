@@ -39,8 +39,8 @@ import java.util.List;
 public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VirgoFileSelectorDialog.SelectFileCallback {
     private static final String TAG = "FragmentOnline";
 
-    private static final int MSG_UPDATE_LIST = 0;
-    private static final int MSG_ADD_LIST = 1;
+    private static final int MSG_UPDATE_LIST = 1;
+    private static final int MSG_ADD_LIST = 2;
 
     private View rootView;
     private Context context;
@@ -85,17 +85,17 @@ public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRef
         //url=http://112.17.40.140/PLTV/88888888/224/3221226554/index.m3u8 : CCTV5
 
         liveList = dbHelper.getAllLiveSource();
-//        if(liveList==null || liveList.size()<1){
-//            LiveSource liveSource = new LiveSource();
-//            liveSource.setName("CCTV5");
-//            liveSource.setUrl("http://112.17.40.140/PLTV/88888888/224/3221226554/index.m3u8");
-//            liveList.add(liveSource);
-//            dbHelper.saveLiveSource(liveSource);
-//            LiveSource liveSource2 = new LiveSource();
-//            liveSource2.setName("CCTV13");
-//            liveSource2.setUrl("http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8");
-//            dbHelper.saveLiveSource(liveSource2);
-//        }
+        if(liveList==null || liveList.size()<1){
+            LiveSource liveSource = new LiveSource();
+            liveSource.setName("CCTV5");
+            liveSource.setUrl("http://112.17.40.140/PLTV/88888888/224/3221226554/index.m3u8");
+            liveList.add(liveSource);
+            dbHelper.saveLiveSource(liveSource);
+            LiveSource liveSource2 = new LiveSource();
+            liveSource2.setName("CCTV13");
+            liveSource2.setUrl("http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8");
+            dbHelper.saveLiveSource(liveSource2);
+        }
 
         adapter = new ListView_Online_Adapter(context, liveList);
         listView.setAdapter(adapter);

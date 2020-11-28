@@ -6,25 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.nepalese.virgosdk.Util.ConvertUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.bean.Video;
 
 import java.util.List;
 
 /**
- * @author nepalese on 2020/10/29 17:54
+ * @author nepalese on 2020/11/24 12:15
  * @usage
  */
-public class GridView_Local_Adapter extends BaseAdapter {
+public class ListView_VideoList_Adapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private List<Video> data;
 
-    public GridView_Local_Adapter(Context context, List<Video> data) {
+    public ListView_VideoList_Adapter(Context context, List<Video> data) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.data = data;
@@ -36,39 +36,47 @@ public class GridView_Local_Adapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public Object getItem(int position) {
         return null;
     }
 
     @Override
-    public long getItemId(int i) {
+    public long getItemId(int position) {
         return 0;
     }
 
     static class ViewHolder {
-        public LinearLayout layout;
-        public TextView tvName;
         public ImageView imgThumb;
+        public TextView tvName, tvDuration, tvSize, tvPath, tvResolution;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
         if (view == null) {
-            view = inflater.inflate(R.layout.layout_grid_view_video, null);
+            view = inflater.inflate(R.layout.layout_list_view_video, null);
             viewHolder = new ViewHolder();
 
-            viewHolder.layout = view.findViewById(R.id.layout_video_all);
-            viewHolder.tvName = view.findViewById(R.id.tvVideoName);
             viewHolder.imgThumb = view.findViewById(R.id.imgVideo);
+            viewHolder.tvName = view.findViewById(R.id.tvVideoName);
+            viewHolder.tvDuration = view.findViewById(R.id.tvVideoDuration);
+            viewHolder.tvSize = view.findViewById(R.id.tvVideoSize);
+            viewHolder.tvPath = view.findViewById(R.id.tvVideoPath);
+            viewHolder.tvResolution = view.findViewById(R.id.tvVideoResolution);
 
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.tvName.setText(data.get(i).getName());
-        Glide.with(context).load(data.get(i).getThumbPath()).into(viewHolder.imgThumb);
+        final Video video = data.get(i);
+        viewHolder.tvName.setText(video.getName());
+        viewHolder.tvDuration.setText(ConvertUtil.formatTime(video.getDuration()));
+        viewHolder.tvSize.setText(ConvertUtil.formatFileSize(video.getSize()));
+        viewHolder.tvPath.setText(video.getPath());
+        viewHolder.tvResolution.setText(video.getResolution());
+
+        Glide.with(context).load(video.getThumbPath()).into(viewHolder.imgThumb);
         return view;
     }
 }
