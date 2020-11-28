@@ -24,7 +24,6 @@
             android:id="@+id/tvTaskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_5"
             android:singleLine="true"
             android:ellipsize="middle"
             android:textSize="@dimen/text_size_15"
@@ -33,7 +32,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_5"
             android:orientation="horizontal">
 
             <TextView
@@ -71,12 +69,11 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:background="@drawable/processbar_style"
-                android:max="100"
-                android:progress="50"/>
+                android:max="100" />
 
             <TextView
                 android:id="@+id/tvTaskPercent"
-                android:layout_marginLeft="@dimen/margin_3"
+                android:layout_marginStart="@dimen/margin_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_15"
@@ -90,10 +87,10 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding_5"
         android:gravity="center"
-        android:text="完成"
+        android:text="@string/download_finish"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_18"
-        android:background="@color/colorRed"/>
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/selector_text_red"/>
 
     <TextView
         android:id="@+id/tvTaskDel"
@@ -101,10 +98,10 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding_5"
         android:gravity="center"
-        android:text="删除"
+        android:text="@string/download_remove"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_18"
-        android:background="@color/colorGreen"/>
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/selector_text_green"/>
 
     <TextView
         android:id="@+id/tvTaskRedo"
@@ -112,9 +109,9 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding_5"
         android:gravity="center"
-        android:text="重下"
+        android:text="@string/download_open"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_18"
-        android:background="@color/colorBlue"/>
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/selector_text_blue"/>
 
 </LinearLayout>

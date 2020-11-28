@@ -1,6 +1,5 @@
 package com.nepalese.virgovideoplayer.presentation.helper;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.lzy.okgo.OkGo;
@@ -11,6 +10,7 @@ import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.download.DownloadListener;
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Util.DateUtil;
+import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
 
 import java.io.File;
@@ -22,10 +22,6 @@ import java.util.List;
  */
 public class DownloadHelper {
     private static final String TAG = "DownloadHelper";
-    private static final String TAG_FILE = "file";//用来区分下载的文件类型
-    private static final String TAG_AUDIO = "audio";//用来区分下载的文件类型
-    private static final String TAG_VIDEO = "video";//用来区分下载的文件类型
-    private static final String TAG_IMAGE = "image";//用来区分下载的文件类型
 
     public static List<DownloadTask> getAllTask() {
         //恢复数据
@@ -38,6 +34,10 @@ public class DownloadHelper {
 
     public static void startAllTask() {
         OkDownload.getInstance().startAll();
+    }
+
+    public static void clearAllTask(){
+        OkDownload.getInstance().removeAll();
     }
 
     public static void download(DownloadItem downloadItem){
@@ -60,22 +60,7 @@ public class DownloadHelper {
         if(file.exists()) {
             Log.i(TAG, "文件已存在！");
             //以当下时间重命名文件
-            fileName = DateUtil.getCurTime()+getFileSuffix(fileName);
-        }
-
-        String tag = TAG_FILE;
-        switch (getFileSuffix(fileName)){
-            case ".mp3":
-                tag = TAG_AUDIO;
-                break;
-            case ".mp4":
-                tag = TAG_VIDEO;
-                break;
-            case ".jpg":
-            case ".png":
-            case ".jpeg":
-                tag = TAG_IMAGE;
-                break;
+            fileName = DateUtil.getCurTime()+ FileUtil.getFileSuffix(fileName);
         }
 
         GetRequest<File> request = OkGo.<File>get(url);//
@@ -88,19 +73,6 @@ public class DownloadHelper {
                 .save()//
                 //.register(new DownloadHelper.DownloadCallback(tag))
                 .start();
-    }
-
-    /**
-     * 提取文件名的后缀
-     * @param fileName
-     * @return 如：.jpg, .png .mp3 ...
-     */
-    private static String getFileSuffix(String fileName){
-        if(TextUtils.isEmpty(fileName)){
-            return null;
-        }
-
-        return fileName.substring(fileName.lastIndexOf("."));
     }
 
     private static class DownloadCallback extends DownloadListener {

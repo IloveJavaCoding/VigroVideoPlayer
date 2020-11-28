@@ -20,6 +20,6 @@
         android:layout_width="@dimen/img_120"
         android:layout_height="@dimen/img_120"
         android:src="@mipmap/icon_play_200"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         android:background="@drawable/selector_button_transparent"/>
 </RelativeLayout>

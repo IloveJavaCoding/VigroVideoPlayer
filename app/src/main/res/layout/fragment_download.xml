@@ -12,7 +12,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/download_title"
+            android:text="@string/video_download"
             android:textColor="@color/colorTY"
             android:textSize="@dimen/text_size_22"
             android:layout_margin="@dimen/margin_10" />

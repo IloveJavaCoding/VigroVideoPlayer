@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -52,15 +53,30 @@
         android:id="@+id/tvNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/list_no_file"
+        android:text="@string/common_no_file"
         android:textSize="@dimen/text_size_25"
         android:textColor="@color/colorRed"
         android:visibility="invisible"/>
 
-    <include
-        layout="@layout/layout_loading"
-        android:visibility="invisible"
-        android:layout_centerInParent="true"
+    <scut.carson_ho.kawaii_loadingview.Kawaii_LoadingView
+        android:layout_below="@id/view"
+        android:id="@+id/loadingView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/colorWhite"
+        android:visibility="invisible"
+        app:blockColor="@color/colorTY"
+
+        app:lineNumber="3"
+        app:fixBlock_Angle="5"
+        app:moveBlock_Angle="20"
+
+        app:blockInterval="8dp"
+        app:half_BlockWidth="15dp"
+        app:initPosition="0"
+
+        app:isClock_Wise="false"
+        app:moveSpeed="500"
+        app:move_Interpolator="@android:anim/bounce_interpolator"/>
 </RelativeLayout>

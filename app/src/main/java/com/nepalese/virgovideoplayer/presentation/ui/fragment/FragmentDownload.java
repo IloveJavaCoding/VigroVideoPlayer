@@ -34,6 +34,7 @@ import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadItem_
 import com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
 import com.nepalese.virgovideoplayer.presentation.ui.DownloadDetailActivity;
+import com.nepalese.virgovideoplayer.presentation.manager.parseUrl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,6 +52,7 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
 
     private static final int MSG_DOWNLOAD_M3U8_OK = 1;
     private static final int MSG_DOWNLOAD_TS_OK = 2;
+    private static final int MSG_FLASH_LIST = 3;
 
     private View rootView;
     private Context context;
@@ -109,28 +111,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
         tempPath = downloadPath + File.separator + M3U8_CACHE_DIR;
 
         listItem = dbHelper.getAllDownloadItem();
-        if(listItem==null || listItem.size()<1){
-            String url = "http://pic1.win4000.com/wallpaper/2020-11-24/5fbc6eb3a2d53.jpg";
-            DownloadItem downloadItem = new DownloadItem();
-            downloadItem.setUrl(url);
-            downloadItem.setSavePath(downloadPath);
-            downloadItem.setFileName("迦娜女帝.jpg");
-            dbHelper.saveDownloadItem(downloadItem);
-
-            String url2 = "http://pic1.win4000.com/wallpaper/2020-11-23/5fbb79cba7d41.jpg";
-            DownloadItem downloadItem2 = new DownloadItem();
-            downloadItem2.setUrl(url2);
-            downloadItem2.setSavePath(downloadPath);
-            downloadItem2.setFileName(getNameWithSuffix4Url(url2));
-            dbHelper.saveDownloadItem(downloadItem2);
-
-            String url3 = "http://117.25.163.26:9990/cdmsa/2020/11/24/d9b2ff7cd598a974.mp4";
-            DownloadItem downloadItem3 = new DownloadItem();
-            downloadItem3.setUrl(url3);
-            downloadItem3.setSavePath(downloadPath);
-            downloadItem3.setFileName("哪吒预告片.MP4");
-            dbHelper.saveDownloadItem(downloadItem3);
-        }
 
         adapter = new ListView_DownloadItem_Adapter(context, listItem);
         listView.setAdapter(adapter);
@@ -259,35 +239,21 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
 
     private void downloadFile() {
         String url = inputFile.getText().toString().trim();
-        if(!TextUtils.isEmpty(url) && (url.startsWith("http") || url.startsWith("https"))){
-            DownloadItem downloadItem = new DownloadItem();
-            downloadItem.setUrl(url);
-            downloadItem.setSavePath(downloadPath);
-            downloadItem.setFileName(getNameWithSuffix4Url(url));
-            dbHelper.saveDownloadItem(downloadItem);
-            DownloadHelper.download(downloadItem);
+        if(!TextUtils.isEmpty(url) && (url.startsWith("http") || url.startsWith("https"))) {
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    List<DownloadItem> temp = parseUrl.getInstance(context).getDownloadItemList(url);
+                    for(DownloadItem item: temp){
+                        dbHelper.saveDownloadItem(item);
+                    }
+                    handler.sendEmptyMessage(MSG_FLASH_LIST);
+                }
+            }.start();
+        }else{
+            SystemUtil.showToast(context, "无效链接！");
         }
-    }
-
-    private String getName4Url(String url){
-        if(TextUtils.isEmpty(url)){
-            return "";
-        }
-
-        return url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".") );
-    }
-
-    private String getNameWithSuffix4Url(String url){
-        if(TextUtils.isEmpty(url)){
-            return "";
-        }
-
-        return url.substring(url.lastIndexOf("/") + 1);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     private Handler handler = new Handler(Looper.myLooper()){
@@ -304,6 +270,9 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
                     //清除缓存
                     FileUtil.deleteDir(tempPath);
                     bM3u8.setEnabled(true);
+                    break;
+                case MSG_FLASH_LIST:
+                    updateList();
                     break;
             }
         }

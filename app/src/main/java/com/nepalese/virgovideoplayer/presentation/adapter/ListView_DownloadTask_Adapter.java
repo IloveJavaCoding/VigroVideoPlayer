@@ -15,6 +15,7 @@ import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.download.DownloadListener;
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Util.ConvertUtil;
+import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgovideoplayer.R;
 
 import java.io.File;
@@ -26,6 +27,11 @@ import java.util.Locale;
  * @usage
  */
 public class ListView_DownloadTask_Adapter extends BaseAdapter {
+    private static final String TAG_FILE = "file";//用来区分下载的文件类型
+    private static final String TAG_AUDIO = "audio";//用来区分下载的文件类型
+    private static final String TAG_VIDEO = "video";//用来区分下载的文件类型
+    private static final String TAG_IMAGE = "image";//用来区分下载的文件类型
+
     private Context context;
     private LayoutInflater inflater;
     private List<DownloadTask> data;
@@ -83,10 +89,24 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         DownloadTask task = data.get(position);
-        task.register(new MyDownloadListener(task.progress.tag, viewHolder));
+        String tag = TAG_FILE;
+        switch (FileUtil.getFileSuffix(task.progress.fileName)){
+            case ".mp3":
+            case ".wav":
+                tag = TAG_AUDIO;
+                break;
+            case ".mp4":
+                tag = TAG_VIDEO;
+                break;
+            case ".jpg":
+            case ".png":
+            case ".jpeg":
+                tag = TAG_IMAGE;
+                break;
+        }
+        task.register(new MyDownloadListener(tag, viewHolder));
 
         final Progress progress = task.progress;
-
         String url = progress.tag;
         if(url.endsWith("jpg") || url.endsWith("png") || url.endsWith("jpeg")){
             Glide.with(context).load(url).into(viewHolder.imgThumb);
@@ -95,8 +115,8 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
         }
 
         viewHolder.tvName.setText(progress.fileName);
-        viewHolder.tvCurSize.setText(ConvertUtil.formatFileSize(progress.currentSize));
-        viewHolder.tvTotalSize.setText(ConvertUtil.formatFileSize(progress.totalSize));
+        viewHolder.tvCurSize.setText(ConvertUtil.formatFileSize(progress.currentSize, 0));
+        viewHolder.tvTotalSize.setText(ConvertUtil.formatFileSize(progress.totalSize, 0));
         float rate = progress.currentSize/(progress.totalSize*1.0f) * 100;
         viewHolder.tvPercent.setText(String.format("%.2f", rate, Locale.CANADA)+"%");
 

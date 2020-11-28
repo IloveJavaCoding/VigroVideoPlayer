@@ -18,6 +18,7 @@ import com.nepalese.virgosdk.Util.M3u8Util;
 import com.nepalese.virgosdk.Util.SystemUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.DBHelper;
+import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,9 +44,6 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
     private Context context;
     private DBHelper dbHelper;
 
-    private Button bClear;
-    private Button bDownload;
-
     private final String url = "http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8";
     private final String saveName = "cctv13.mp4";
     private final String temp = "temp";
@@ -61,7 +59,6 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
 
         init();
         setData();
-        setListener();
 
         return rootView;
     }
@@ -69,8 +66,13 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
     private void init() {
         dbHelper = DBHelper.getInstance(context);
 
-        bClear = rootView.findViewById(R.id.bClear);
-        bDownload = rootView.findViewById(R.id.bDownload);
+        rootView.findViewById(R.id.bClearAll).setOnClickListener(this);
+        rootView.findViewById(R.id.bClearLocal).setOnClickListener(this);
+        rootView.findViewById(R.id.bClearOnline).setOnClickListener(this);
+        rootView.findViewById(R.id.bClearDownload).setOnClickListener(this);
+        rootView.findViewById(R.id.bClearTask).setOnClickListener(this);
+
+        rootView.findViewById(R.id.bDownload).setOnClickListener(this);
     }
 
     private void setData() {
@@ -79,16 +81,23 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
         m3u8Name =  M3u8Util.getM3u8Name(url);
     }
 
-    private void setListener() {
-        bClear.setOnClickListener(this);
-        bDownload.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.bClear:
-                clearAllTable();
+            case R.id.bClearAll:
+                dbHelper.clearAllTable();
+                break;
+            case R.id.bClearLocal:
+                dbHelper.clearLocalVideo();
+                break;
+            case R.id.bClearOnline:
+                dbHelper.clearLiveSource();
+                break;
+            case R.id.bClearDownload:
+                dbHelper.clearDownloadItem();
+                break;
+            case R.id.bClearTask:
+                DownloadHelper.clearAllTask();
                 break;
             case R.id.bDownload:
                 download();
@@ -124,11 +133,6 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
                 handler.sendEmptyMessage(MSG_DOWNLOAD_FILE_OK);
             }
         }.start();
-    }
-
-    private void clearAllTable() {
-//        dbHelper.clearLiveSource();
-        dbHelper.deleteAllDownloadItem();
     }
     
     private Handler handler = new Handler(Looper.myLooper()){

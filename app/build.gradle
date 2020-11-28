@@ -50,4 +50,6 @@ dependencies {
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okserver:2.0.5'
     implementation 'com.google.zxing:core:3.2.1'
+
+    implementation 'com.carson_ho:Kawaii_LoadingView:1.0.0'
 }

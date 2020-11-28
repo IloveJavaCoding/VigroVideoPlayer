@@ -40,6 +40,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.List;
 
+import scut.carson_ho.kawaii_loadingview.Kawaii_LoadingView;
+
 /**
  * @author nepalese on 2020/10/29 12:00
  * @usage
@@ -57,7 +59,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
     private ListView listView;
     private ListView_VideoList_Adapter adapter;
     private VirgoFileSelectorDialog dialog;
-    private LinearLayout layoutLoad;
+    private Kawaii_LoadingView loadingView;
 
     private List<Video> videoList;
     private String rootPath, thumbPath;
@@ -92,7 +94,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         ibList = rootView.findViewById(R.id.ibList);
         tvNote = rootView.findViewById(R.id.tvNote);
         listView = rootView.findViewById(R.id.listViewVideoLocal);
-        layoutLoad = rootView.findViewById(R.id.layoutLoad);
+        loadingView = rootView.findViewById(R.id.loadingView);
     }
 
     private void setData() {
@@ -114,14 +116,11 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
             dialog.show();
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "onItemClick: " + videoList.get(position).getName());
-                Intent intent = new Intent(context.getApplicationContext(), VideoPlayerActivity.class);
-                intent.putExtra("index", position);
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Log.i(TAG, "onItemClick: " + videoList.get(position).getName());
+            Intent intent = new Intent(context.getApplicationContext(), VideoPlayerActivity.class);
+            intent.putExtra("index", position);
+            startActivity(intent);
         });
     }
 
@@ -158,12 +157,14 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
 
     private void hideLoadingView() {
         Log.i(TAG, "hideLoadingView: ");
-        layoutLoad.setVisibility(View.INVISIBLE);
+        loadingView.stopMoving();
+        loadingView.setVisibility(View.INVISIBLE);
     }
 
     private void showLoadingView() {
         Log.i(TAG, "showLoadingView: ");
-        layoutLoad.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.startMoving();
     }
 
     @Override
@@ -217,7 +218,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
                 case MSG_FLASH_LIST:
                     showLoadingView();
                     clearThumb();
-                    dbHelper.clearVideo();
+                    dbHelper.clearLocalVideo();
                     break;
             }
         }

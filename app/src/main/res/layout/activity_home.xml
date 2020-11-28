@@ -36,8 +36,14 @@
                 android:text="@string/video_local"
                 android:textSize="@dimen/text_size_18"
                 android:textAlignment="center"
-                android:textColor="@drawable/selector_text"
-                android:background="@drawable/selector_check_bg" />
+                android:textColor="@drawable/selector_text_cheeck"
+                android:background="@drawable/radio_button_style" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorTY_Half"
+                android:layout_margin="@dimen/margin_1"/>
 
             <RadioButton
                 android:id="@+id/radio_online"
@@ -48,8 +54,14 @@
                 android:text="@string/video_online"
                 android:textSize="@dimen/text_size_18"
                 android:textAlignment="center"
-                android:textColor="@drawable/selector_text"
-                android:background="@drawable/selector_check_bg"/>
+                android:textColor="@drawable/selector_text_cheeck"
+                android:background="@drawable/radio_button_style"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorTY_Half"
+                android:layout_margin="@dimen/margin_1"/>
 
             <RadioButton
                 android:id="@+id/radio_download"
@@ -60,8 +72,14 @@
                 android:text="@string/video_download"
                 android:textSize="@dimen/text_size_18"
                 android:textAlignment="center"
-                android:textColor="@drawable/selector_text"
-                android:background="@drawable/selector_check_bg"/>
+                android:textColor="@drawable/selector_text_cheeck"
+                android:background="@drawable/radio_button_style"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorTY_Half"
+                android:layout_margin="@dimen/margin_1"/>
 
             <RadioButton
                 android:id="@+id/radio_setting"
@@ -72,8 +90,8 @@
                 android:text="@string/setting"
                 android:textSize="@dimen/text_size_18"
                 android:textAlignment="center"
-                android:textColor="@drawable/selector_text"
-                android:background="@drawable/selector_check_bg"/>
+                android:textColor="@drawable/selector_text_cheeck"
+                android:background="@drawable/radio_button_style"/>
         </RadioGroup>
     </LinearLayout>
 

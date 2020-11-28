@@ -1,13 +1,29 @@
 <resources>
     <string name="app_name">VirgoVideoPlayer</string>
-    <string name="video_online">在线视频</string>
-    <string name="setting">系统设置</string>
+
+    <!--本地-->
     <string name="video_local">本地视频</string>
-    <string name="loading">Loading</string>
-    <string name="list_no_file">暂无文件！</string>
-    <string name="sec_3">3秒</string>
-    <string name="setting_clear_cache">清空缓存</string>
+
+    <!--在线-->
+    <string name="video_online">在线视频</string>
     <string name="online_live">电视直播</string>
-    <string name="download_title">文件下载</string>
+
+    <!--下载-->
     <string name="video_download">文件下载</string>
+    <string name="download_finish">完成</string>
+    <string name="download_remove">移除</string>
+    <string name="download_open">打开</string>
+
+    <!--设置-->
+    <string name="setting">系统设置</string>
+    <string name="setting_clear_cache">清空缓存</string>
+    <string name="setting_clear_local">清空本地视频</string>
+    <string name="setting_clear_online">清空在线列表</string>
+    <string name="setting_clear_download">清空下载项</string>
+    <string name="setting_clear_task">清空任务列表</string>
+
+    <!--通用-->
+    <string name="common_loading">Loading</string>
+    <string name="common_no_file">暂无文件！</string>
+    <string name="common_sec_3">3秒</string>
 </resources>

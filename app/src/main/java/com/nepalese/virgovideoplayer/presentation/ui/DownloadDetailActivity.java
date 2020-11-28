@@ -1,17 +1,13 @@
 package com.nepalese.virgovideoplayer.presentation.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Adapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.lzy.okgo.model.Progress;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Base.BaseActivity;
 import com.nepalese.virgovideoplayer.R;

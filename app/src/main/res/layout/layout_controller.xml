@@ -31,7 +31,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxHeight="2dp"
-        android:progress="30"
         android:layout_gravity="center_vertical"
         android:thumb="@drawable/ic_seekbar_bike"
         android:progressDrawable="@drawable/seekbar_style" />

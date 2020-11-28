@@ -14,8 +14,6 @@ import com.nepalese.virgovideoplayer.data.db.VideoDao;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
-
-
 /**
  * @author nepalese on 2020/10/27 16:39
  * @usage
@@ -82,10 +80,6 @@ public class DBHelper {
         videoDao.delete(item);
     }
 
-    public void clearVideo(){
-        videoDao.deleteAll();
-    }
-
     public void deleteVideoByName(String name){
         List<Video> list = getVideoByName(name);
         for(Video video: list){
@@ -119,10 +113,6 @@ public class DBHelper {
         downloadItemDao.delete(item);
     }
 
-    public void deleteAllDownloadItem(){
-        downloadItemDao.deleteAll();
-    }
-
     public void updateDownloadItem(DownloadItem item){
         downloadItemDao.update(item);
     }
@@ -140,10 +130,6 @@ public class DBHelper {
         liveSourceDao.delete(item);
     }
 
-    public void clearLiveSource(){
-        liveSourceDao.deleteAll();
-    }
-
     public void updateLiveSource(LiveSource item){
         liveSourceDao.update(item);
     }
@@ -154,8 +140,21 @@ public class DBHelper {
 
 
     //clear all table
+    public void clearLocalVideo(){
+        videoDao.deleteAll();
+    }
+
+    public void clearLiveSource(){
+        liveSourceDao.deleteAll();
+    }
+
+    public void clearDownloadItem(){
+        downloadItemDao.deleteAll();
+    }
+
     public void clearAllTable(){
-        clearVideo();
+        clearLocalVideo();
         clearLiveSource();
+        clearDownloadItem();
     }
 }
