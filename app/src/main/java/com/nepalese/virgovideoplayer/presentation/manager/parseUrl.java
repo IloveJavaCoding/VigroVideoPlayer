@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,26 +30,22 @@ import java.util.regex.Pattern;
 public class parseUrl {
     private static final String TAG = "parseUrl";
 
-    private final int TYPE_UNKNOWN = -1;
-    private final int TYPE_FILE = 1;
-    private final int TYPE_WEB = 2;
-    //可下载文件：
-    private static final String[] SUFFIX_FILE = {"mp3", "jpg", "png", "jpeg", "mp4", "m3u8", "pdf", "txt"};
-    //网页
-    private static final String[] SUFFIX_WEB = {"html", "net", "com", "cn"};
-
     private static volatile parseUrl instance;
     private Context context;
-    private String downloadPath;//下载文件放置位置
+
+    private final String downloadPath;//下载文件放置位置
     private String head = null;//链接头
     private String scheme = null;//协议
     private String html = null;
     private static ExecutorService executor = Executors.newFixedThreadPool(10);
+    private static final long TIME_OUT = 60 * 1000L;
 
     private parseUrl(Context context){
         this.context = context;
         downloadPath = FileUtil.getAppRootPth(context) + File.separator + Constants.DIR_DOWNLOAD;
+//        downloadPath = FileUtil.getRootPath() + File.separator + Constants.DIR_DOWNLOAD;
     }
+
     public static parseUrl getInstance(Context context){
         if(instance==null){
             synchronized (parseUrl.class){
@@ -60,41 +57,24 @@ public class parseUrl {
         return instance;
     }
 
-    private int getUrlType(String url){
-        if(TextUtils.isEmpty(url) || !(url.startsWith("http") || url.startsWith("https"))){
-            return TYPE_UNKNOWN;
-        }
 
-        for(String str: SUFFIX_FILE){
-            if(url.endsWith(str)){
-                return TYPE_FILE;
-            }
-        }
-
-        for(String str: SUFFIX_WEB){
-            if(url.endsWith(str)){
-                return TYPE_WEB;
-            }
-        }
-
-        return TYPE_UNKNOWN;
-    }
 
     public List<DownloadItem> getDownloadItemList(String url){
         if(TextUtils.isEmpty(url)) return null;
-        head = getUrlHead(url);
-        scheme = getUrlScheme(url);
+        head = PathUtil.getUrlHead(url);
+        scheme = PathUtil.getUrlScheme(url);
 
         List<DownloadItem> list = new ArrayList<>();
-        int type = getUrlType(url);
+        int type = PathUtil.getUrlType(url);
         switch (type){
-            case TYPE_FILE:
+            case PathUtil.TYPE_FILE:
                 list.add(getDownloadItem(url));
                 break;
-            case TYPE_WEB:
-                list.addAll(getDownloadItems(url));
+            case PathUtil.TYPE_WEB:
+//                list.addAll(getDownloadItems(url));
+                list.addAll(getDownloadItemsImg(url));
                 break;
-            case TYPE_UNKNOWN:
+            case PathUtil.TYPE_OTHER:
                 break;
         }
         return list;
@@ -111,16 +91,35 @@ public class parseUrl {
     private List<DownloadItem> getDownloadItems(String url){
         getHtml(url);
         executor.shutdown();
-        Log.i(TAG, "等待下载中...");
-        while (!executor.isTerminated()) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            executor.awaitTermination(TIME_OUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
         List<DownloadItem> downloadItems = new ArrayList<>();
         List<String> links = crawlWebPage(html);
+        if(links!=null){
+            for(String link: links){
+                downloadItems.add(getDownloadItem(link));
+            }
+        }else{
+            Log.e(TAG, "getDownloadItems: 未找到任何链接");
+        }
+        return downloadItems;
+    }
+
+    private List<DownloadItem> getDownloadItemsImg(String url){
+        getHtml(url);
+        executor.shutdown();
+        try {
+            executor.awaitTermination(TIME_OUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        List<DownloadItem> downloadItems = new ArrayList<>();
+        List<String> links = crawlImage(html);
         if(links!=null){
             for(String link: links){
                 downloadItems.add(getDownloadItem(link));
@@ -149,6 +148,7 @@ public class parseUrl {
                     buffer.append(temp.trim());
                 }
                 html = buffer.toString();
+                Log.i(TAG, "getHtml: " + html);
             }catch (IOException e) {
                 e.printStackTrace();
             }finally {
@@ -170,7 +170,6 @@ public class parseUrl {
 
     private List<String> crawlWebPage(String html) {
         if(!TextUtils.isEmpty(html)) {
-            Log.i(TAG, "crawlWebPage: " + html);
             //src="http://pic1.win4000.com/wallpaper/2020-11-24/5fbca616736aa.jpg"
             //src="//img.tukuppt.com/newpreview_music/08/98/81/5c88be672193357468.mp3"
             Pattern pattern = Pattern.compile(Constants.RE_FILTER_URL);
@@ -200,21 +199,37 @@ public class parseUrl {
         return null;
     }
 
-    //获取整个链接头：协议及主机地址 http(s)://xxx.xxx.xxx/
-    public static String getUrlHead(String url){
-        if(TextUtils.isEmpty(url)) return null;
-
-        if(!(url.startsWith("http")||url.startsWith("https")))return null;
-
-        return url.substring(0, url.indexOf("/", 10));
-    }
-
-    //获取url链接协议类型：http、https...
-    public static String getUrlScheme(String url){
-        if(TextUtils.isEmpty(url)) return null;
-
-        if(!(url.startsWith("http")||url.startsWith("https")))return null;
-
-        return url.substring(0, url.indexOf("/"));
+    private List<String> crawlImage(String html){
+        if(!TextUtils.isEmpty(html)){
+            //<img src="https://qqpublic.qpic.cn/qq_public/0/0-1505819196-A8F81F3C5693B38EECE559AB83D9E423/600?fmt=jpg&amp;h=1266&amp;ppv=1&amp;size=123&amp;w=600" alt="">
+            Pattern pattern = Pattern.compile(Constants.RE_FILTER_URL_IMG);
+            Matcher matcher = pattern.matcher(html);
+            List<String> list = new ArrayList<>();
+            while (matcher.find()) {
+                String link = matcher.group();
+                if(link.contains("src")){
+                    continue;
+                }
+                if(link.contains("?")){
+                    link = link.substring(0, link.indexOf("?")) + ".jpg";
+                }
+                Log.i(TAG, "crawlImage: link " + link);
+                //1. 仅缺少协议：http(s):
+                if (link.startsWith("//")) {
+                    link = scheme + link;
+                }
+                //2. 缺少整个链接头： http(s)://xxx.xxx.com
+                else if (link.startsWith("/")) {
+                    link = head + link;
+                }
+                //3. 完整的链接
+                list.add(link);
+            }
+            return (List<String>) list;
+        }
+        else{
+            Log.e(TAG, "crawlWebPage: 网页内容为空");
+        }
+        return null;
     }
 }

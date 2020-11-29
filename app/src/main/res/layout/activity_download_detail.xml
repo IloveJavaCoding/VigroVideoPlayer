@@ -20,7 +20,7 @@
         <ListView
             android:id="@+id/listDownloadTask"
             android:padding="@dimen/padding_10"
-            android:dividerHeight="10dp"
+            android:dividerHeight="5dp"
             android:divider="@color/colorTY_Little"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -73,7 +73,7 @@ public class DBHelper {
     //===========================================增删改查====================================
     //video dao:
     public void saveVideo(Video item){
-        videoDao.insert(item);
+        videoDao.insertOrReplace(item);
     }
 
     public void deleteVideo(Video item){
@@ -106,7 +106,7 @@ public class DBHelper {
 
     //downloaditem dao:
     public void saveDownloadItem(DownloadItem item){
-        downloadItemDao.insert(item);
+        downloadItemDao.insertOrReplace(item);
     }
 
     public void deleteDownloadItem(DownloadItem item){
@@ -123,7 +123,7 @@ public class DBHelper {
 
     //LiveSourceDao
     public void saveLiveSource(LiveSource item){
-        liveSourceDao.insert(item);
+        liveSourceDao.insertOrReplace(item);
     }
 
     public void deleteLiveSource(LiveSource item){

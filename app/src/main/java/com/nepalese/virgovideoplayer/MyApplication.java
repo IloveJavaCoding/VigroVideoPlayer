@@ -19,4 +19,8 @@ public class MyApplication extends Application {
         //初始化OkGo
         OkGo.getInstance().init(this);
     }
+
+    public Context getContext() {
+        return context;
+    }
 }

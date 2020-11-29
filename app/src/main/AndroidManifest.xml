@@ -13,7 +13,7 @@
         android:theme="@style/Theme.VigroVideoPlayer"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".presentation.ui.DownloadDetailActivity"></activity>
+        <activity android:name=".presentation.ui.DownloadDetailActivity"/>
         <activity
             android:name=".presentation.ui.FullVideoPlayerActivity"
             android:screenOrientation="landscape" />
@@ -31,6 +31,18 @@
         </activity>
 
         <service android:name=".presentation.service.NetworkService" />
+
+        <!--android:name="android.support.v4.content.FileProvider"-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.nepalese.virgovideoplayer.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />

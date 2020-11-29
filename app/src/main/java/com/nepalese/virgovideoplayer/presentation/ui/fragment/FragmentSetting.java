@@ -36,22 +36,10 @@ import java.net.URL;
  */
 public class FragmentSetting extends Fragment implements View.OnClickListener {
     private static final String TAG = "FragmentSetting";
-    
-    private static final int MSG_DOWNLOAD_FILE_OK = 1;
-    private static final int MSG_DOWNLOAD_TS_OK = 2;
 
     private View rootView;
     private Context context;
     private DBHelper dbHelper;
-
-    private final String url = "http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8";
-    private final String saveName = "cctv13.mp4";
-    private final String temp = "temp";
-    private String saveDir;
-    private String tempPath;
-    private String m3u8Name;
-
-    private volatile int downloadNum = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -71,14 +59,9 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.bClearOnline).setOnClickListener(this);
         rootView.findViewById(R.id.bClearDownload).setOnClickListener(this);
         rootView.findViewById(R.id.bClearTask).setOnClickListener(this);
-
-        rootView.findViewById(R.id.bDownload).setOnClickListener(this);
     }
 
     private void setData() {
-        saveDir = FileUtil.getRootPath();
-        tempPath = saveDir + File.separator + temp;//存放缓存文件
-        m3u8Name =  M3u8Util.getM3u8Name(url);
     }
 
     @Override
@@ -99,96 +82,6 @@ public class FragmentSetting extends Fragment implements View.OnClickListener {
             case R.id.bClearTask:
                 DownloadHelper.clearAllTask();
                 break;
-            case R.id.bDownload:
-                download();
-                break;
-        }
-    }
-
-    private void download() {
-        File tempDir = new File(tempPath);
-        if (tempDir.exists()) {
-            // 清空内部文件
-            FileUtil.deleteDir(tempDir.getAbsolutePath());
-        }
-        
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                //M3u8Util.saveM3u8File(url, tempPath, m3u8Name);
-                File dir = new File(tempPath);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                InputStream ireader;
-                try {
-                    ireader = new URL(url).openStream();
-                    FileOutputStream writer = new FileOutputStream(new File(dir, m3u8Name));
-                    FileUtil.readerWriterStream(ireader, writer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                handler.sendEmptyMessage(MSG_DOWNLOAD_FILE_OK);
-            }
-        }.start();
-    }
-    
-    private Handler handler = new Handler(Looper.myLooper()){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case MSG_DOWNLOAD_FILE_OK:
-                    parseAndDownTs();
-                    break;
-                case MSG_DOWNLOAD_TS_OK:
-                    M3u8Util.mergeTsFile((M3U8)msg.obj, saveDir, saveName);
-                    Log.i(TAG, "handleMessage: merge success!");
-                    //清除缓存
-                    FileUtil.deleteDir(tempPath);
-                    break;
-            }
-        }
-    };
-
-    private void parseAndDownTs() {
-        M3U8 m3u8 = M3u8Util.parseM3u8File(tempPath, m3u8Name, url);
-        downloadFragment(m3u8);
-    }
-
-    private void downloadFragment(M3U8 m3u8) {
-        File dir = new File(m3u8.getSaveDir());
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        for (M3U8 m : m3u8.getM3u8List()) {
-            // 下载对应的m3u8
-            downloadFragment(m);
-        }
-
-        for (M3U8Ts ts : m3u8.getTsList()) {
-            Runnable runnable = () -> {
-                FileOutputStream writer;
-                try {
-                    writer = new FileOutputStream(new File(dir, ts.getContent()));
-                    FileUtil.readerWriterStream(new URL(m3u8.getUrlRefer() + ts.getContent()).openStream(), writer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ++downloadNum;
-                Log.i(TAG, "parseAndDownTs: " + downloadNum);
-                if(downloadNum>=m3u8.getTsList().size()){
-                    Message message = Message.obtain();
-                    message.what = MSG_DOWNLOAD_TS_OK;
-                    message.obj = m3u8;
-                    handler.sendMessage(message);
-                }
-                Log.i(TAG, "parseAndDownTs: save ts: " + ts.getContent());
-            };
-            new Thread(runnable).start();
         }
     }
 }

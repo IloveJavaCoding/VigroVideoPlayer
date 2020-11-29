@@ -93,7 +93,7 @@
             android:id="@+id/bFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="File"
+            android:text="IMAGE"
             android:textColor="@color/colorWhite"
             android:layout_marginLeft="@dimen/padding_5"
             android:layout_marginRight="@dimen/padding_5"/>

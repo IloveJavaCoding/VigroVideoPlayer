@@ -33,6 +33,7 @@ import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadItem_Adapter;
 import com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
+import com.nepalese.virgovideoplayer.presentation.manager.parseM3U8;
 import com.nepalese.virgovideoplayer.presentation.ui.DownloadDetailActivity;
 import com.nepalese.virgovideoplayer.presentation.manager.parseUrl;
 
@@ -50,9 +51,7 @@ import java.util.List;
 public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final String TAG = "FragmentDownload";
 
-    private static final int MSG_DOWNLOAD_M3U8_OK = 1;
-    private static final int MSG_DOWNLOAD_TS_OK = 2;
-    private static final int MSG_FLASH_LIST = 3;
+    private static final int MSG_FLASH_LIST = 1;
 
     private View rootView;
     private Context context;
@@ -66,16 +65,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
     private ListView_DownloadItem_Adapter adapter;
 
     private List<DownloadItem> listItem;
-
-    private String rootPath;
-    private String downloadPath;//下载文件放置位置
-    private String tempPath;//m3u8 文件缓存位置
-    private String m3u8Name;//m3u8 链接后部名称
-    private String m3u8Url;
-    private final String M3U8_CACHE_DIR = "temp";
-    private final String DOWNLOAD_DIR = "download";
-    private volatile int downloadNum = 0;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,7 +80,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
 
     private void init() {
         dbHelper = DBHelper.getInstance(context);
-        rootPath = FileUtil.getAppRootPth(context);
 
         refreshLayout = rootView.findViewById(R.id.swipeLayoutDownload);
         inputFile = rootView.findViewById(R.id.delInputFile);
@@ -107,9 +95,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void setData() {
-        downloadPath = rootPath + File.separator + DOWNLOAD_DIR;
-        tempPath = downloadPath + File.separator + M3U8_CACHE_DIR;
-
         listItem = dbHelper.getAllDownloadItem();
 
         adapter = new ListView_DownloadItem_Adapter(context, listItem);
@@ -161,80 +146,18 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
         startActivity(intent);
     }
 
-    private void downloadM3u8() {
-        m3u8Url = inputM3u8.getText().toString().trim();
-        if(!TextUtils.isEmpty(m3u8Url) && (m3u8Url.startsWith("http") || m3u8Url.startsWith("https")) && m3u8Url.endsWith("m3u8")){
-            //显示下载提示
-            bM3u8.setEnabled(false);
-            m3u8Name  =  M3u8Util.getM3u8Name(m3u8Url);
-            File tempDir = new File(tempPath);
-            if (tempDir.exists()) {
-                // 清空内部文件
-                FileUtil.deleteDir(tempDir.getAbsolutePath());
+    private void downloadM3u8(){
+        inputM3u8.setEnabled(false);
+        String m3u8Url = inputM3u8.getText().toString().trim();
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                int out = parseM3U8.getInstance(context).downloadM3u8(m3u8Url);
+                Log.i(TAG, "run: " + out);
+                inputM3u8.setEnabled(true);
             }
-
-            new Thread(){
-                @Override
-                public void run() {
-                    super.run();
-                    File dir = new File(tempPath);
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
-                    InputStream ireader;
-                    try {
-                        ireader = new URL(m3u8Url).openStream();
-                        FileOutputStream writer = new FileOutputStream(new File(dir, m3u8Name));
-                        FileUtil.readerWriterStream(ireader, writer);
-                        handler.sendEmptyMessage(MSG_DOWNLOAD_M3U8_OK);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
-        }else {
-            SystemUtil.showToast(context, "无效链接！");
-        }
-    }
-
-    private void parseDownloadTS() {
-        M3U8 m3u8 = M3u8Util.parseM3u8File(tempPath, m3u8Name, m3u8Url);
-        downloadFragment(m3u8);
-    }
-
-    private void downloadFragment(M3U8 m3u8) {
-        downloadNum = 0;
-        File dir = new File(m3u8.getSaveDir());
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        for (M3U8 m : m3u8.getM3u8List()) {
-            downloadFragment(m);
-        }
-
-        for (M3U8Ts ts : m3u8.getTsList()) {
-            Runnable runnable = () -> {
-                FileOutputStream writer;
-                try {
-                    writer = new FileOutputStream(new File(dir, ts.getContent()));
-                    FileUtil.readerWriterStream(new URL(m3u8.getUrlRefer() + ts.getContent()).openStream(), writer);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                ++downloadNum;
-                Log.i(TAG, "parseAndDownTs: " + downloadNum);
-                if(downloadNum>=m3u8.getTsList().size()){
-                    Message message = Message.obtain();
-                    message.what = MSG_DOWNLOAD_TS_OK;
-                    message.obj = m3u8;
-                    handler.sendMessage(message);
-                }
-            };
-            new Thread(runnable).start();
-        }
+        }.start();
     }
 
     private void downloadFile() {
@@ -244,6 +167,7 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
                 @Override
                 public void run() {
                     super.run();
+                    Log.i(TAG, "run: ");
                     List<DownloadItem> temp = parseUrl.getInstance(context).getDownloadItemList(url);
                     for(DownloadItem item: temp){
                         dbHelper.saveDownloadItem(item);
@@ -261,16 +185,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case MSG_DOWNLOAD_M3U8_OK:
-                    parseDownloadTS();
-                    break;
-                case MSG_DOWNLOAD_TS_OK:
-                    M3u8Util.mergeTsFile((M3U8)msg.obj, downloadPath, DateUtil.getCurTime()+".mp4");
-                    Log.i(TAG, "handleMessage: merge success!");
-                    //清除缓存
-                    FileUtil.deleteDir(tempPath);
-                    bM3u8.setEnabled(true);
-                    break;
                 case MSG_FLASH_LIST:
                     updateList();
                     break;

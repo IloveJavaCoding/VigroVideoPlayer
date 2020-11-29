@@ -1,6 +1,10 @@
 package com.nepalese.virgovideoplayer.presentation.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import com.lzy.okserver.download.DownloadListener;
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Util.ConvertUtil;
 import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.IntentUtil;
 import com.nepalese.virgovideoplayer.R;
 
 import java.io.File;
@@ -26,7 +31,9 @@ import java.util.Locale;
  * @author nepalese on 2020/11/25 15:22
  * @usage
  */
-public class ListView_DownloadTask_Adapter extends BaseAdapter {
+public class ListView_DownloadTask_Adapter extends BaseAdapter implements View.OnClickListener {
+    private static final String TAG = "ListView_DownloadTask_A";
+
     private static final String TAG_FILE = "file";//用来区分下载的文件类型
     private static final String TAG_AUDIO = "audio";//用来区分下载的文件类型
     private static final String TAG_VIDEO = "video";//用来区分下载的文件类型
@@ -35,11 +42,13 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private List<DownloadTask> data;
+    private downloadTaskInterface taskInterface;
 
-    public ListView_DownloadTask_Adapter(Context context, List<DownloadTask> data) {
+    public ListView_DownloadTask_Adapter(Context context, List<DownloadTask> data, downloadTaskInterface downloadTaskInterface) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.data = data;
+        this.taskInterface = downloadTaskInterface;
     }
 
     @Override
@@ -58,10 +67,19 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
         return 0;
     }
 
+    @Override
+    public void onClick(View v) {
+        taskInterface.onItemClick(v);
+    }
+
+    public interface downloadTaskInterface {
+        void onItemClick(View v);
+    }
+
     static class ViewHolder {
         public ImageView imgThumb;
         public TextView tvName, tvCurSize, tvTotalSize, tvPercent;
-        public TextView tvStatue, tvDelete, tvReDo;
+        public TextView tvStatue, tvDelete, tvOpen;
         public ProgressBar progressBar;
     }
 
@@ -82,7 +100,7 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
 
             viewHolder.tvStatue = view.findViewById(R.id.tvTaskState);
             viewHolder.tvDelete = view.findViewById(R.id.tvTaskDel);
-            viewHolder.tvReDo = view.findViewById(R.id.tvTaskRedo);
+            viewHolder.tvOpen = view.findViewById(R.id.tvTaskOpen);
 
             view.setTag(viewHolder);
         } else {
@@ -123,24 +141,35 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter {
         viewHolder.progressBar.setProgress((int) rate);
 
         setState(progress, viewHolder);
+
+        //监听
+        viewHolder.tvStatue.setOnClickListener(this);
+        viewHolder.tvStatue.setTag(position);
+
+        viewHolder.tvDelete.setOnClickListener(this);
+        viewHolder.tvDelete.setTag(position);
+
+        viewHolder.tvOpen.setOnClickListener(this);
+        viewHolder.tvOpen.setTag(position);
+
         return view;
     }
 
     private void setState(Progress progress, ViewHolder viewHolder){
         switch (progress.status){
-            case  1:
+            case  Progress.WAITING:
                 viewHolder.tvStatue.setText("等待");
                 break;
-            case  2:
+            case  Progress.LOADING:
                 viewHolder.tvStatue.setText("下载");
                 break;
-            case  3:
+            case  Progress.PAUSE:
                 viewHolder.tvStatue.setText("暂停");
                 break;
-            case  4:
+            case  Progress.ERROR:
                 viewHolder.tvStatue.setText("错误");
                 break;
-            case  5:
+            case  Progress.FINISH:
                 viewHolder.tvStatue.setText("完成");
                 break;
         }
