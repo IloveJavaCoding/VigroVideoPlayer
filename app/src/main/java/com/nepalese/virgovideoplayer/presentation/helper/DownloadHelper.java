@@ -12,6 +12,7 @@ import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Util.ConvertUtil;
 import com.nepalese.virgosdk.Util.DateUtil;
 import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class DownloadHelper {
         if(file.exists()) {
             Log.i(TAG, "文件已存在！");
             //以当下时间重命名文件
-            fileName = ConvertUtil.string2Hex(String.valueOf(DateUtil.getCurTime2())) + FileUtil.getFileSuffix(fileName);
+            fileName = ConvertUtil.string2Hex(String.valueOf(DateUtil.getCurTime2())) + PathUtil.getFileSuffix(fileName);
         }
 
         GetRequest<File> request = OkGo.<File>get(url);//

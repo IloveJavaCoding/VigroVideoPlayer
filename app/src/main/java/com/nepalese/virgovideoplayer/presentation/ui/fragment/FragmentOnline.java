@@ -94,6 +94,7 @@ public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRef
             LiveSource liveSource2 = new LiveSource();
             liveSource2.setName("CCTV13");
             liveSource2.setUrl("http://183.207.249.36:80/PLTV/4/224/3221227387/index.m3u8");
+            liveList.add(liveSource2);
             dbHelper.saveLiveSource(liveSource2);
         }
 
@@ -151,6 +152,14 @@ public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRef
         adapter.notifyDataSetChanged();
     }
 
+    private void HideLoading() {
+        layoutLoad.setVisibility(View.INVISIBLE);
+    }
+
+    private void showLoading() {
+        layoutLoad.setVisibility(View.VISIBLE);
+    }
+
     private Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -158,14 +167,15 @@ public class FragmentOnline extends Fragment implements SwipeRefreshLayout.OnRef
             switch (msg.what){
                 case MSG_UPDATE_LIST:
                     updateList();
+                    HideLoading();
                     break;
                 case MSG_ADD_LIST:
+                    showLoading();
                     startLiveAddTask((List<File>)msg.obj);
                     break;
             }
         }
     };
-
 
     @Override
     public void onRefresh() {

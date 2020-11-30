@@ -57,8 +57,6 @@ public class parseUrl {
         return instance;
     }
 
-
-
     public List<DownloadItem> getDownloadItemList(String url){
         if(TextUtils.isEmpty(url)) return null;
         head = PathUtil.getUrlHead(url);
@@ -84,7 +82,7 @@ public class parseUrl {
         DownloadItem downloadItem = new DownloadItem();
         downloadItem.setUrl(url);
         downloadItem.setSavePath(downloadPath);
-        downloadItem.setFileName(FileUtil.getNameWithSuffix4Url(url));
+        downloadItem.setFileName(PathUtil.getNameWithSuffix(url));
         return downloadItem;
     }
 

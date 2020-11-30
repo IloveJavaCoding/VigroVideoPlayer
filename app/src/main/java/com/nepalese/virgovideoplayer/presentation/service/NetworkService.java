@@ -112,7 +112,7 @@ public class NetworkService extends Service {
         if(f1!=null && f1.length>0){
             for(File f2: f1){
                 if(f2.isFile()){
-                    for(String post: Constants.VIDEO_EXTENSION){
+                    for(String post: com.nepalese.virgosdk.Manager.Constants.SUFFIX_VIDEO){
                         if(f2.getPath().endsWith(post)){
                             Log.i(TAG, "scanVideoFile: " + f2.getAbsolutePath());
                             Video video = getVideoFileInfo(context, f2.getAbsolutePath());

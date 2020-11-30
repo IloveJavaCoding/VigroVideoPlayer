@@ -21,6 +21,7 @@ import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Util.ConvertUtil;
 import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgosdk.Util.IntentUtil;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.R;
 
 import java.io.File;
@@ -108,7 +109,7 @@ public class ListView_DownloadTask_Adapter extends BaseAdapter implements View.O
         }
         DownloadTask task = data.get(position);
         String tag = TAG_FILE;
-        switch (FileUtil.getFileSuffix(task.progress.fileName)){
+        switch (PathUtil.getFileSuffix(task.progress.fileName)){
             case ".mp3":
             case ".wav":
                 tag = TAG_AUDIO;

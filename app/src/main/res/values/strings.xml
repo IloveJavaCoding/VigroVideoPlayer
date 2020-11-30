@@ -26,4 +26,5 @@
     <string name="common_loading">Loading</string>
     <string name="common_no_file">暂无文件！</string>
     <string name="common_sec_3">3秒</string>
+    <string name="setting_version">当前版本</string>
 </resources>

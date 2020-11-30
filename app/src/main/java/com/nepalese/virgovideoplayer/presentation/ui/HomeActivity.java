@@ -19,13 +19,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private RadioGroup radioGroup;
 
-    private FragmentLocal fragmentLocal;
-    private FragmentOnline fragmentOnline;
-    private FragmentDownload fragmentDownload;
-    private FragmentSetting fragmentSetting;
+    private FragmentLocal fragmentLocal = null;
+    private FragmentOnline fragmentOnline = null;
+    private FragmentDownload fragmentDownload = null;
+    private FragmentSetting fragmentSetting = null;
     private FragmentTransaction transaction;
-
-    private int checkIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,22 +50,18 @@ public class HomeActivity extends AppCompatActivity {
             hideAllFragment(transaction);
             switch (i){
                 case R.id.radio_local:
-                    checkIndex = 1;
                     Log.i(TAG, "onCheckedChanged: local");
                     showLocalFragment();
                     break;
                 case R.id.radio_online:
-                    checkIndex = 2;
                     Log.i(TAG, "onCheckedChanged: online");
                     showOnlineFragment();
                     break;
                 case R.id.radio_download:
-                    checkIndex = 3;
                     Log.i(TAG, "onCheckedChanged: online");
                     showDownloadFragment();
                     break;
                 case R.id.radio_setting:
-                    checkIndex = 4;
                     Log.i(TAG, "onCheckedChanged: setting");
                     showSettingFragment();
                     break;
@@ -98,67 +92,38 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showLocalFragment(){
-        if(fragmentLocal==null){
+        if(fragmentLocal!=null){
+            transaction.show(fragmentLocal);
+        }else{
             fragmentLocal = new FragmentLocal();
             transaction.add(R.id.fragment_container, fragmentLocal);
-        }else{
-            transaction.show(fragmentLocal);
         }
     }
 
     private void showOnlineFragment(){
-        if(fragmentOnline==null){
+        if(fragmentOnline!=null){
+            transaction.show(fragmentOnline);
+        }else{
             fragmentOnline = new FragmentOnline();
             transaction.add(R.id.fragment_container, fragmentOnline);
-        }else{
-            transaction.show(fragmentOnline);
         }
     }
 
     private void showDownloadFragment(){
-        if(fragmentDownload==null){
+        if(fragmentDownload!=null){
+            transaction.show(fragmentDownload);
+        }else{
             fragmentDownload = new FragmentDownload();
             transaction.add(R.id.fragment_container, fragmentDownload);
-        }else{
-            transaction.show(fragmentDownload);
         }
     }
 
     private void showSettingFragment(){
-        if(fragmentSetting==null){
+        if(fragmentSetting!=null){
+            transaction.show(fragmentSetting);
+        }else{
             fragmentSetting = new FragmentSetting();
             transaction.add(R.id.fragment_container, fragmentSetting);
-        }else{
-            transaction.show(fragmentSetting);
         }
     }
-
-//    @Override
-//    protected void onResume() {
-//        Log.i(TAG, "onResume: " + checkIndex);
-//        super.onResume();
-//        switch (checkIndex){
-//            case 0:
-//                break;
-//            case 1:
-//                radioGroup.check(R.id.radio_local);
-//                break;
-//            case 2:
-//                radioGroup.check(R.id.radio_online);
-//                break;
-//            case 3:
-//                radioGroup.check(R.id.radio_download);
-//                break;
-//            case 4:
-//                radioGroup.check(R.id.radio_setting);
-//                break;
-//        }
-//    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        Log.i(TAG, "onPause: hide all");
-//        hideAllFragment(transaction);
-//    }
 }

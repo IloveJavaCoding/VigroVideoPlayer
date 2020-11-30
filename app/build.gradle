@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -21,6 +21,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //1. appName + versionName
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appName = "VirgoVideoPlayer"
+            def outFilename = "appName-versionName.apk"
+
+            outFilename = outFilename.replace("appName", appName)
+            outFilename = outFilename.replace("versionName", getVersionName())
+
+            outputFileName = outFilename
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

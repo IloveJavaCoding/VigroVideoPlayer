@@ -10,10 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,18 +18,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.ScreenUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.data.DBHelper;
 import com.nepalese.virgovideoplayer.data.bean.Video;
-import com.nepalese.virgovideoplayer.presentation.adapter.GridView_VideoList_Adapter;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_VideoList_Adapter;
 import com.nepalese.virgovideoplayer.presentation.component.VirgoFileSelectorDialog;
 import com.nepalese.virgovideoplayer.presentation.event.FinishScanEvent;
 import com.nepalese.virgovideoplayer.presentation.event.StartScanVideoEvent;
 import com.nepalese.virgovideoplayer.presentation.ui.VideoPlayerActivity;
-import com.nepalese.virgosdk.Util.FileUtil;
-import com.nepalese.virgosdk.Util.ScreenUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,7 +44,7 @@ import scut.carson_ho.kawaii_loadingview.Kawaii_LoadingView;
  */
 public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.SelectFileCallback {
     private static final String TAG = "FragmentLocal";
-    private static final int MSG_FLASH_LIST = 0;
+    private static final int MSG_FLASH_LIST = 1;
 
     private Context context;
     private DBHelper dbHelper;
@@ -83,7 +79,9 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         thumbPath = rootPath + File.separator + Constants.DIR_THUMB_NAIL;
         File file = new File(thumbPath);
         if(!file.exists()){
-            file.mkdir();
+            if(!file.mkdir()){
+                return;
+            }
         }
     }
 
@@ -214,12 +212,10 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case MSG_FLASH_LIST:
-                    showLoadingView();
-                    clearThumb();
-                    dbHelper.clearLocalVideo();
-                    break;
+            if (msg.what == MSG_FLASH_LIST) {
+                showLoadingView();
+                clearThumb();
+                dbHelper.clearLocalVideo();
             }
         }
     };

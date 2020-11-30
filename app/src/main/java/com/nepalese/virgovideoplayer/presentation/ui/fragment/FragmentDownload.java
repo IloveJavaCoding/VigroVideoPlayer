@@ -21,11 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.nepalese.virgosdk.Beans.M3U8;
-import com.nepalese.virgosdk.Beans.M3U8Ts;
-import com.nepalese.virgosdk.Util.DateUtil;
-import com.nepalese.virgosdk.Util.FileUtil;
-import com.nepalese.virgosdk.Util.M3u8Util;
 import com.nepalese.virgosdk.Util.SystemUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.DBHelper;
@@ -34,19 +29,14 @@ import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadItem_
 import com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
 import com.nepalese.virgovideoplayer.presentation.manager.parseM3U8;
-import com.nepalese.virgovideoplayer.presentation.ui.DownloadDetailActivity;
 import com.nepalese.virgovideoplayer.presentation.manager.parseUrl;
+import com.nepalese.virgovideoplayer.presentation.ui.DownloadDetailActivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 /**
  * @author nepalese on 2020/11/25 10:05
- * @usage 在线文件下载
+ * @usage 在线文件下载, m3u8解析合成，网页爬取图片链接
  */
 public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final String TAG = "FragmentDownload";
@@ -88,7 +78,6 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
         bM3u8 = rootView.findViewById(R.id.bM3u8);
         bFile = rootView.findViewById(R.id.bFile);
         ibDetail = rootView.findViewById(R.id.ibDownloadDetail);
-
         listView = rootView.findViewById(R.id.listDownloadItem);
 
         refreshLayout.setColorSchemeColors(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE);

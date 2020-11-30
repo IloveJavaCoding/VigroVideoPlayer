@@ -50,7 +50,7 @@ public class parseM3U8 {
 
     public static parseM3U8 getInstance(Context context){
         if(instance==null){
-            synchronized (parseUrl.class){
+            synchronized (parseM3U8.class){
                 if(instance==null){
                     instance = new parseM3U8(context);
                 }

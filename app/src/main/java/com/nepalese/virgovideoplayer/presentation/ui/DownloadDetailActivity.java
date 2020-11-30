@@ -99,7 +99,7 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
         Progress progress = task.progress;
         switch (progress.status){
             case  Progress.WAITING:
-//                task.start();
+            case  Progress.FINISH:
                 break;
             case  Progress.LOADING:
                 task.pause();
@@ -112,9 +112,6 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
             case  Progress.ERROR:
                 task.restart();
                 adapter.notifyDataSetChanged();
-                break;
-            case  Progress.FINISH:
-                //
                 break;
         }
     }
@@ -138,5 +135,4 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
         intent.setDataAndType(uri, PathUtil.getIntentType(filePath));
         startActivity(intent);
     }
-
 }
