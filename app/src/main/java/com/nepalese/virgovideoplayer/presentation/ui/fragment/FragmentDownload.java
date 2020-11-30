@@ -21,12 +21,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.nepalese.virgocomponent.component.VirgoDelIconEditText;
 import com.nepalese.virgosdk.Util.SystemUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.DBHelper;
 import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadItem_Adapter;
-import com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
 import com.nepalese.virgovideoplayer.presentation.manager.parseM3U8;
 import com.nepalese.virgovideoplayer.presentation.manager.parseUrl;

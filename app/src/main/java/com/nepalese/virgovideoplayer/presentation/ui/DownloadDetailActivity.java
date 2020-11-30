@@ -16,10 +16,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Base.BaseActivity;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadTask_Adapter;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
-import com.nepalese.virgovideoplayer.presentation.manager.PathUtil;
 
 import java.io.File;
 import java.util.List;

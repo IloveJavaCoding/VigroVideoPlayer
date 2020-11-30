@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.nepalese.virgocomponent.component.VirgoFileSelectorDialog;
 import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgosdk.Util.ScreenUtil;
 import com.nepalese.virgovideoplayer.R;
@@ -25,7 +26,6 @@ import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.data.DBHelper;
 import com.nepalese.virgovideoplayer.data.bean.Video;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_VideoList_Adapter;
-import com.nepalese.virgovideoplayer.presentation.component.VirgoFileSelectorDialog;
 import com.nepalese.virgovideoplayer.presentation.event.FinishScanEvent;
 import com.nepalese.virgovideoplayer.presentation.event.StartScanVideoEvent;
 import com.nepalese.virgovideoplayer.presentation.ui.VideoPlayerActivity;
@@ -105,6 +105,7 @@ public class FragmentLocal extends Fragment implements VirgoFileSelectorDialog.S
         listView.setAdapter(adapter);
 
         dialog.setDialogHeight(ScreenUtil.getScreenHeight(context)/2);//设置弹框高度（显示屏高度一半）
+        dialog.setDialogAlpha(1.0f);
         dialog.setFlag(VirgoFileSelectorDialog.FLAG_DIR);//设置要选择的是文件还是文件夹
         dialog.setCallback(this);//设置回调，必选，若要返回值
     }

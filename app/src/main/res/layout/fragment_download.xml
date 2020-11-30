@@ -43,7 +43,7 @@
         android:layout_margin="@dimen/margin_5"
         android:orientation="horizontal">
 
-        <com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText
+        <com.nepalese.virgocomponent.component.VirgoDelIconEditText
             android:id="@+id/delInputM3u8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
         android:layout_margin="@dimen/margin_5"
         android:orientation="horizontal">
 
-        <com.nepalese.virgovideoplayer.presentation.component.VirgoDelIconEditText
+        <com.nepalese.virgocomponent.component.VirgoDelIconEditText
             android:id="@+id/delInputFile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

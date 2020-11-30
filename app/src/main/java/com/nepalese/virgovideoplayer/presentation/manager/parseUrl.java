@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
 

@@ -20,11 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.nepalese.virgocomponent.component.VirgoFileSelectorDialog;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.data.DBHelper;
 import com.nepalese.virgovideoplayer.data.bean.LiveSource;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_Online_Adapter;
-import com.nepalese.virgovideoplayer.presentation.component.VirgoFileSelectorDialog;
 import com.nepalese.virgovideoplayer.presentation.parsexml.ParseLive;
 import com.nepalese.virgovideoplayer.presentation.ui.FullVideoPlayerActivity;
 import com.nepalese.virgosdk.Util.ScreenUtil;
