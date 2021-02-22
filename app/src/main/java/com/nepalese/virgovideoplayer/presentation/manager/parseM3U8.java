@@ -9,6 +9,7 @@ import com.nepalese.virgosdk.Beans.M3U8Ts;
 import com.nepalese.virgosdk.Util.ConvertUtil;
 import com.nepalese.virgosdk.Util.DateUtil;
 import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgosdk.Util.SystemUtil;
 import com.nepalese.virgovideoplayer.data.Constants;
 
@@ -50,7 +51,7 @@ public class parseM3U8 {
 
     public static parseM3U8 getInstance(Context context){
         if(instance==null){
-            synchronized (parseUrl.class){
+            synchronized (parseM3U8.class){
                 if(instance==null){
                     instance = new parseM3U8(context);
                 }

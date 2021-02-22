@@ -16,10 +16,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okserver.download.DownloadTask;
 import com.nepalese.virgosdk.Base.BaseActivity;
+import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.presentation.adapter.ListView_DownloadTask_Adapter;
 import com.nepalese.virgovideoplayer.presentation.helper.DownloadHelper;
-import com.nepalese.virgovideoplayer.presentation.manager.PathUtil;
 
 import java.io.File;
 import java.util.List;
@@ -99,7 +99,7 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
         Progress progress = task.progress;
         switch (progress.status){
             case  Progress.WAITING:
-//                task.start();
+            case  Progress.FINISH:
                 break;
             case  Progress.LOADING:
                 task.pause();
@@ -112,9 +112,6 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
             case  Progress.ERROR:
                 task.restart();
                 adapter.notifyDataSetChanged();
-                break;
-            case  Progress.FINISH:
-                //
                 break;
         }
     }
@@ -138,5 +135,4 @@ public class DownloadDetailActivity extends BaseActivity implements ListView_Dow
         intent.setDataAndType(uri, PathUtil.getIntentType(filePath));
         startActivity(intent);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.nepalese.virgovideoplayer.presentation.ui;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,13 +11,13 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+
+import com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewSurface;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.presentation.bean.BaseActivity;
-import com.nepalese.virgosdk.VirgoView.VideoView.VirgoVideoViewSurface;
 
 import java.io.File;
-
-import androidx.annotation.NonNull;
 
 public class FullVideoPlayerActivity extends BaseActivity {
     private static final String TAG = "FullVideoPlayerActivity";
@@ -26,8 +25,6 @@ public class FullVideoPlayerActivity extends BaseActivity {
     private static final int MSG_HIDE_CONTROLLER = 1;
     private static final int MSG_SHOW_CONTROLLER = 2;
     private static final int HIDE_AFTER = 2345;
-
-    private Context context;
 
     private VirgoVideoViewSurface videoPlayer;
     private ImageButton ibControl;

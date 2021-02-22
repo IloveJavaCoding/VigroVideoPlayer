@@ -13,10 +13,5 @@ public class Constants {
     public static final String DIR_DOWNLOAD = "download";
     public static final String DIR_M3U8 = "m3u8";
     public static final String RE_FILTER_URL = "(https?:)?//(?:[-\\w.]|(?:%[\\da-fA-F]{2}))+[^\\u4e00-\\u9fa5]+[\\w-_?&=#%:]{0}(jpg|png|jpeg|mp3|mp4){1}";
-    public static final String RE_FILTER_URL_IMG ="(?i)(?<=img src=\")[^\"]*(?=\")";
-
-    public static final String[] IMAGE_EXTENSION = {"jpg", "jpeg", "png", "svg", "bmp", "tiff"};
-    public static final String[] AUDIO_EXTENSION = {"mp3", "wav", "wma", "aac", "flac"};
-    public static final String[] VIDEO_EXTENSION = {"mp4", "flv", "avi", "wmv", "mpeg", "mov", "rm", "swf"};
-    public static final String[] TEXT_EXTENSION = {"txt", "java", "html", "xml", "php"};
+    public static final String RE_FILTER_URL_IMG ="(?<=img src=\")[^\"]*(?=\")";
 }
