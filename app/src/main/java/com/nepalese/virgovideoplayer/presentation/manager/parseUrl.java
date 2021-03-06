@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nepalese.virgosdk.Util.FileUtil;
+import com.nepalese.virgosdk.Util.MatchUtil;
 import com.nepalese.virgosdk.Util.PathUtil;
 import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.data.bean.DownloadItem;
@@ -118,7 +119,7 @@ public class parseUrl {
         }
 
         List<DownloadItem> downloadItems = new ArrayList<>();
-        List<String> links = crawlImage(html);
+        List<String> links = crawlImage2(html);
         if(links!=null){
             for(String link: links){
                 downloadItems.add(getDownloadItem(link));
@@ -230,5 +231,34 @@ public class parseUrl {
             Log.e(TAG, "crawlWebPage: 网页内容为空");
         }
         return null;
+    }
+
+    private static List<String> crawlImage2(String html){
+        if(!TextUtils.isEmpty(html)){
+            List<String> urls = MatchUtil.matchNumsUrl(html);
+            return filterUrl(urls);
+        } else{
+            Log.e(TAG, "crawlWebPage: 网页内容为空");
+        }
+        return null;
+    }
+
+    private static List<String> filterUrl(List<String> urls) {
+        List<String> out = new ArrayList<>();
+        for(String str: urls) {
+            if(str.length()<10){
+                continue;
+            }
+            if((str.startsWith("http") || str.startsWith("https"))) {
+                if(str.contains("jpeg") || str.contains("png")) {
+                    if(!str.contains("token")) {
+                        str = str.substring(0, str.indexOf("jpeg")+4);
+                    }
+                    out.add(str);
+                }
+            }
+        }
+
+        return out;
     }
 }

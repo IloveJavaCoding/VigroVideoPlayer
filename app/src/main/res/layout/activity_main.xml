@@ -20,7 +20,7 @@
         android:text="@string/common_sec_3"
         android:textColor="@color/colorWhite"
         android:layout_marginEnd="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginTop="40dp"
         android:paddingLeft="@dimen/padding_10"
         android:paddingRight="@dimen/padding_10"
         android:layout_alignParentEnd="true"

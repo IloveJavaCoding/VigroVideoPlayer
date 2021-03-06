@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
         imgCover = findViewById(R.id.imgCover);
         imgCover.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        switch (MathUtil.getRandomNumInt(1,5)){
+        switch (MathUtil.getRandomInt(1,5)){
             case 1:
                 Glide.with(context).load(IMG_URL1).into(imgCover);
                 break;
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    private Handler handler = new Handler(Looper.myLooper()){
+    private final Handler handler = new Handler(Looper.myLooper()){
         @SuppressLint("DefaultLocale")
         @Override
         public void handleMessage(@NonNull Message msg) {

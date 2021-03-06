@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VirgoVideoPlayer</string>
+    <string name="app_name">VirgoVideo</string>
 
     <!--本地-->
     <string name="video_local">本地视频</string>
