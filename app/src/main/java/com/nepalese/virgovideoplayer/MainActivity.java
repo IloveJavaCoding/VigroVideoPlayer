@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.nepalese.virgosdk.Base.BaseActivity;
 import com.nepalese.virgosdk.Util.MathUtil;
 import com.nepalese.virgosdk.Util.SystemUtil;
+import com.nepalese.virgosdk.Util.WinowUtil;
 import com.nepalese.virgovideoplayer.data.Constants;
 import com.nepalese.virgovideoplayer.presentation.service.NetworkService;
 
@@ -44,8 +45,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setLayout();
         setContentView(R.layout.activity_main);
+        setLayout();
 
         if(!SystemUtil.checkPermission(this, NEEDED_PERMISSIONS)){
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);

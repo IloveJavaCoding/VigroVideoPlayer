@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RadioGroup;
 
+import com.nepalese.virgosdk.Util.FileUtil;
 import com.nepalese.virgovideoplayer.R;
 import com.nepalese.virgovideoplayer.presentation.ui.fragment.FragmentDownload;
 import com.nepalese.virgovideoplayer.presentation.ui.fragment.FragmentLocal;
 import com.nepalese.virgovideoplayer.presentation.ui.fragment.FragmentOnline;
 import com.nepalese.virgovideoplayer.presentation.ui.fragment.FragmentSetting;
+
+import java.io.File;
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
@@ -25,14 +29,25 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentSetting fragmentSetting = null;
     private FragmentTransaction transaction;
 
+    private static final String FileName = "VirgoVideo";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLayout();
         setContentView(R.layout.activity_home);
 
+        makeDir();
         init();
         setListener();
+    }
+
+    private void makeDir(){
+        String path = FileUtil.getRootPath() + "/Download/" + FileName;
+        File file = new File(path);
+        if(!file.exists()){
+            Log.i(TAG, "makeDir: ");
+            file.mkdir();
+        }
     }
 
     private void init() {
