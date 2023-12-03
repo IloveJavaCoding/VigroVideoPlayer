@@ -11,6 +11,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,25 @@ public class ParseLive extends DefaultHandler{
                 SAXParser parser = spf.newSAXParser();
                 parser.parse(inputSource, this);
                 input.close();
+            } catch (Throwable var7) {
+                var7.printStackTrace();
+            }
+
+            return this.mList;
+        } else {
+            System.out.println("文件不存在！");
+            return null;
+        }
+    }
+
+    public List<LiveSource> parse(InputStream stream, String encodeType) {
+        if (stream!= null) {
+            try {
+                InputSource inputSource = new InputSource(new InputStreamReader(stream, encodeType));
+                SAXParserFactory spf = SAXParserFactory.newInstance();
+                SAXParser parser = spf.newSAXParser();
+                parser.parse(inputSource, this);
+                stream.close();
             } catch (Throwable var7) {
                 var7.printStackTrace();
             }

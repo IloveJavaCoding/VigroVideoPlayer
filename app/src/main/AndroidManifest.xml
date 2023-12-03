@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VigroVideoPlayer"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="m">
         <activity android:name=".presentation.ui.DownloadDetailActivity"/>
         <activity

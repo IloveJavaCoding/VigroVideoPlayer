@@ -169,7 +169,7 @@ public class FragmentDownload extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    private Handler handler = new Handler(Looper.myLooper()){
+    private final Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
